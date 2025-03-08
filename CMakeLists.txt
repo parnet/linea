@@ -22,9 +22,9 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall -Wextra")
 # ===================[ MPI ]============================================================================================
 find_package(PkgConfig QUIET)
 
-find_package(MPI QUIET)
+#find_package(MPI QUIET)
 if (MPI_FOUND)
-    message(STATUS "MPI was found version: ${MPI_CXX_VERSION}")
+    message(STATUS "[X]   MPI was found version: ${MPI_CXX_VERSION}")
     #message(STATUS "MPI found: ${MPI_CXX_COMPILER}")
     #message(STATUS "MPI include path: ${MPI_INCLUDE_PATH}")
     #message(STATUS "MPI libraries: ${MPI_LIBRARIES}")
@@ -38,7 +38,7 @@ if (MPI_FOUND)
 
     # -DMPI_C_COMPILER=/path/to/mpicc -DMPI_CXX_COMPILER=/path/to/mpicxx ..
 else()
-    message(STATUS "MPI was ot found")
+    message(STATUS "[ ]   MPI was not found")
 endif()
 # ----------------------------------------------------------------------------------------------------------------------
 find_package(OpenMP QUIET)

@@ -1,9 +1,5 @@
-//
-// Created by maro on 2025-03-06.
-//
-
-#ifndef NAIVE_VECTOR_HPP
-#define NAIVE_VECTOR_HPP
+#ifndef DATA_NAIVE_VECTOR_HPP
+#define DATA_NAIVE_VECTOR_HPP
 
 class NaiveVector {
 public:
@@ -37,7 +33,7 @@ public:
     }
 
 private:
-    size_t _num_elements;
+    size_t _num_elements{};
     double * data;
 };
 

@@ -1,9 +1,5 @@
-//
-// Created by maro on 2025-03-06.
-//
-
-#ifndef COMPILER_HPP
-#define COMPILER_HPP
+#ifndef UTIL_COMPILER_HPP
+#define UTIL_COMPILER_HPP
 
 void print_arch() {
 

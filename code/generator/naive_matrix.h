@@ -1,9 +1,6 @@
-//
-// Created by maro on 2025-03-07.
-//
+#ifndef GENERATOR_NAIVE_MATRIX_HPP
+#define GENERATOR_NAIVE_MATRIX_HPP
 
-#ifndef GENERATOR_HPP
-#define GENERATOR_HPP
 #include <cmath>
 #include <functional>
 
@@ -59,7 +56,6 @@ void create_laplacian_2d(StdMatrix &matrix,size_t gridsize){ // 5 for 3 inner no
 
         }
     }
-
     matrix(rows-1,cols-1) = 1;
 }
 
@@ -195,3 +191,5 @@ inline void create_fun(StdVector &v,const std::function<double (size_t)>& fun) {
     };
 }
 #endif //GENERATOR_HPP
+
+#endif //NAIVE_MATRIX_H

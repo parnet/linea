@@ -1,9 +1,5 @@
-//
-// Created by maro on 2025-03-06.
-//
-
-#ifndef STD_FLAT_MATRIX_HPP
-#define STD_FLAT_MATRIX_HPP
+#ifndef DATA_STD_FLAT_MATRIX_HPP
+#define DATA_STD_FLAT_MATRIX_HPP
 #include <vector>
 
 class StdFlatMatrix {

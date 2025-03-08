@@ -1,9 +1,8 @@
-#ifndef STD_CRS_MATRIX_HPP
-#define STD_CRS_MATRIX_HPP
+#ifndef DATA_STD_CRS_MATRIX_HPP
+#define DATA_STD_CRS_MATRIX_HPP
+
 #include <utility>
 #include <vector>
-#include <iostream>
-
 #include "naive_matrix.hpp"
 #include "std_matrix.hpp"
 
@@ -68,7 +67,7 @@ public:
         return  ss.str();
     }
 
-private:
+public:
     size_t _num_rows;
     size_t _num_cols;
     std::vector<double> _data;

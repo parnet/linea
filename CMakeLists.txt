@@ -23,7 +23,6 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall -Wextra")
 find_package(PkgConfig QUIET)
 
 find_package(MPI QUIET)
-
 if (MPI_FOUND)
     message(STATUS "MPI was found version: ${MPI_CXX_VERSION}")
     #message(STATUS "MPI found: ${MPI_CXX_COMPILER}")
@@ -46,6 +45,7 @@ find_package(OpenMP QUIET)
 if (OpenMP_FOUND)
     message(STATUS "OpenMP was found version: ${OpenMP_CXX_VERSION}") # was found C version ${OpenMP_C_VERSION}, CXX version
     # todo link against :  -fopenmp -fopenmp-simd  list(APPEND LINK_LIBRARIES OpenMP::OpenMP_CXX)
+    set(OpenMP_LIBRARIES "OpenMP::OpenMP_CXX")
 else ()
     message(STATUS "OpenMP was not found")
 endif ()
@@ -129,7 +129,13 @@ add_executable(${PROJECT_NAME}
         code/data/std_flat_matrix.hpp
         code/data/std_vector.hpp
         code/data/std_matrix.hpp
-        code/generator/generator.hpp
+        code/generator/std_matrix.hpp
+        code/generator/naive_matrix.h
+        code/cpu/csrmv.hpp
+        test/std_matrix.hpp
+        code/openmp/csrmv.hpp
+        code/openmp/general.hpp
+        code/cpu/dot.hpp
 )
 
 
@@ -142,7 +148,10 @@ message(STATUS "CXX flags: ${CMAKE_CXX_FLAGS}")
 #
 #message(STATUS "link-libraries: ${LINK_LIBRARIES}")
 #target_link_libraries(${PROJECT_NAME} PRIVATE ${LINK_LIBRARIES})
-# target_link_libraries(${PROJECT_NAME} PRIVATE ${HDF5_LIBRARIES})
+#target_link_libraries(${PROJECT_NAME} PRIVATE ${HDF5_LIBRARIES})
+MESSAGE(STATUS "${OpenMP_LIBRARIES}")
+#target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_CXX)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenMP_LIBRARIES})
 
 
 # ===================[ project properties  ]============================================================================

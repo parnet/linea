@@ -1,5 +1,5 @@
-#ifndef STD_VECTOR_HPP
-#define STD_VECTOR_HPP
+#ifndef DATA_STD_VECTOR_HPP
+#define DATA_STD_VECTOR_HPP
 #include <vector>
 
 class StdVector {
@@ -19,19 +19,28 @@ public:
 
     ~StdVector() = default;
 
-    double operator[](size_t index) const {
+    double operator()(size_t index) const {
         return data[index];
     }
 
-    double & operator[](size_t index) {
+    double & operator()(size_t index) {
         return data[index];
     }
 
-    size_t size() {
+    size_t size() const {
         return _num_elements;
     }
-private:
+
+    std::string str() const {
+        std::stringstream ss;
+        for (size_t i = 0; i < _num_elements -1; ++i) {
+            ss << data[i] << ", ";
+        }
+        ss << data[_num_elements-1];
+        return ss.str();
+    }
+public:
     size_t _num_elements;
     std::vector<double> data;
 };
-#endif //STD_VECTOR_HPP
+#endif

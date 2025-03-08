@@ -2,8 +2,8 @@
 // Created by maro on 2025-03-06.
 //
 
-#ifndef NAIVE_MATRIX_HPP
-#define NAIVE_MATRIX_HPP
+#ifndef DATA_NAIVE_MATRIX_HPP
+#define DATA_NAIVE_MATRIX_HPP
 
 class NaiveMatrix {
 public:
@@ -47,4 +47,4 @@ private:
     size_t _num_cols;
     double * data;
 };
-#endif //NAIVE_MATRIX_HPP
+#endif

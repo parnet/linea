@@ -1,0 +1,5 @@
+# Exkludera CMake-build mappar
+cmake-build-debug/
+
+# Exkludera .idea mappar (från IntelliJ IDEA eller JetBrains)
+.idea/

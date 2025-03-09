@@ -1,6 +1,7 @@
 #include <iostream>
 
 // #include "hdf5/version.hpp"
+#include "benchmark/csrmv.hpp"
 #include "code/util/compiler.hpp"
 #include "code/generator/std_matrix.hpp"
 #include "code/openmp/general.hpp"
@@ -20,7 +21,9 @@ int main()
     //std::cout << 7*7*7*7 << std::endl;
     // std::cout << matrix.str() << std::endl;
 
-    gneral_matrix_test();
-
+    // gneral_matrix_test();
+    benchmark_csrmv();
+    double x;
+    std::cin >> x;
     return 0;
 }

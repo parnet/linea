@@ -22,7 +22,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall -Wextra")
 # ===================[ MPI ]============================================================================================
 find_package(PkgConfig QUIET)
 
-#find_package(MPI QUIET)
+find_package(MPI QUIET)
 if (MPI_FOUND)
     message(STATUS "[X]   MPI was found version: ${MPI_CXX_VERSION}")
     #message(STATUS "MPI found: ${MPI_CXX_COMPILER}")
@@ -43,11 +43,11 @@ endif()
 # ----------------------------------------------------------------------------------------------------------------------
 find_package(OpenMP QUIET)
 if (OpenMP_FOUND)
-    message(STATUS "OpenMP was found version: ${OpenMP_CXX_VERSION}") # was found C version ${OpenMP_C_VERSION}, CXX version
+    message(STATUS "[X]   OpenMP was found version: ${OpenMP_CXX_VERSION}") # was found C version ${OpenMP_C_VERSION}, CXX version
     # todo link against :  -fopenmp -fopenmp-simd  list(APPEND LINK_LIBRARIES OpenMP::OpenMP_CXX)
     set(OpenMP_LIBRARIES "OpenMP::OpenMP_CXX")
 else ()
-    message(STATUS "OpenMP was not found")
+    message(STATUS "[ ]   OpenMP was not found")
 endif ()
 # ----------------------------------------------------------------------------------------------------------------------
 # todo HIP
@@ -63,27 +63,27 @@ endif ()
 find_package(HDF5 QUIET COMPONENTS C CXX)
 # find_package(HDF5)
 if(HDF5_FOUND)
-    message(STATUS "HDF5_VERSION was found version " ${HDF5_VERSION})
+    message(STATUS "[X]   HDF5_VERSION was found version " ${HDF5_VERSION})
     include_directories(${HDF5_INCLUDE_DIR})
     # todo link against : hdf5 hdf5_cpp
 else ()
-    message(STATUS "HDF5 was not found")
+    message(STATUS "[ ]   HDF5 was not found")
 endif ()
 # ----------------------------------------------------------------------------------------------------------------------
 find_package(LAPACK QUIET)
 if(LAPACK_FOUND)
     if (LAPACK_VERSION STREQUAL "")
-        message(STATUS "LAPACK was found: ${LAPACK_VERSION}")
+        message(STATUS "[ ]   LAPACK was found: ${LAPACK_VERSION}")
     else ()
         pkg_check_modules(LAPACK_PKG QUIET lapack)
         if(LAPACK_PKG_FOUND)
-            message(STATUS "LAPACK version: ${LAPACK_PKG_VERSION}")
+            message(STATUS "[X]   LAPACK version: ${LAPACK_PKG_VERSION}")
         endif ()
     endif ()
     # todo link against : lapack
 
 else ()
-    message(STATUS "LAPCK was not found")
+    message(STATUS "[ ]   LAPACK was not found")
 endif ()
 
 
@@ -93,32 +93,34 @@ find_package(BLAS QUIET)
 
 if(BLAS_FOUND)
     if (OPENBLAS_VERSION STREQUAL "")
-        message(STATUS "LAPACK was found: ${OPENBLAS_VERSION}")
+        message(STATUS "[X]   BLAS was found: ${OPENBLAS_VERSION}")
     else ()
         pkg_check_modules(BLAS_PKG QUIET code/blas)
         if(BLAS_PKG_FOUND)
-            message(STATUS "BLAS version: ${BLAS_PKG_VERSION}")
+            message(STATUS "[X]   BLAS version: ${BLAS_PKG_VERSION}")
         endif ()
     endif ()
     # message(STATUS ${BLAS_LIBRARIES})
     # target_compile_definitions(Linea PRIVATE -DUSE_BLAS=1)
     # list(APPEND ${LINK_LIBRARIES} ${BLAS_LIBRARIES})
+else ()
+    message(STATUS "[ ]   BLAS was not found")
 endif ()
 # ----------------------------------------------------------------------------------------------------------------------
 find_package(IntelMKL QUIET)
 
 if (IntelMKL_FOUND)
-    message(STATUS "Intel MKL was found version: ${IntelMKL_VERSION}")
+    message(STATUS "[ ]   Intel MKL was found version: ${IntelMKL_VERSION}")
 
 else ()
-    message(STATUS "Intel MKL was not found")
+    message(STATUS "[ ]   Intel MKL was not found")
 endif ()
 # ----------------------------------------------------------------------------------------------------------------------
 
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(${PROJECT_NAME}
-        code/main.cpp
+        main.cpp
         code/data/naive_vector.hpp
         code/util/compiler.hpp
         code/hdf5/parallel_file.hpp
@@ -136,6 +138,8 @@ add_executable(${PROJECT_NAME}
         code/openmp/csrmv.hpp
         code/openmp/general.hpp
         code/cpu/dot.hpp
+        benchmark/csrmv.hpp
+        code/util/converter.hpp
 )
 
 

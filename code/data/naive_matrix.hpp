@@ -41,7 +41,15 @@ public:
     size_t cols() {
         return _num_cols;
     }
-private:
+
+    size_t memory_size() {
+        size_t total = 0;
+        total += sizeof(size_t)*3;
+        total += sizeof(double)*_num_elements;
+        return total;
+    }
+
+public:
     size_t _num_elements;
     size_t _num_rows;
     size_t _num_cols;

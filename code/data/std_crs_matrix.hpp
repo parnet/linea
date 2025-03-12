@@ -9,6 +9,8 @@
 
 class StdCRSMatrix {
 public:
+    StdCRSMatrix() = default;
+
     StdCRSMatrix(size_t num_rows, size_t num_cols, std::vector<double> data,
                  std::vector<size_t> col_index,
                  std::vector<size_t> row_ptr) : _num_rows(num_rows),
@@ -18,40 +20,15 @@ public:
                                                 _row_ptr(std::move(row_ptr)) {
     }
 
-    explicit StdCRSMatrix(StdMatrix &matrix) {
-        _num_rows = matrix.rows();
-        _num_cols = matrix.cols();
-
-        _row_ptr.push_back(0); // Första index är alltid 0
-
-        for (size_t i = 0; i < _num_rows; ++i) {
-            for (size_t j = 0; j < matrix.cols(); ++j) {
-                if (matrix(i, j) != 0) {
-                    _data.push_back(matrix(i, j));
-                    _col_index.push_back(j);
-                }
-            }
-            _row_ptr.push_back(_data.size());
-        }
-
+    size_t memory_size() {
+        size_t total = 0;
+        total += sizeof(size_t)*2;
+        total += _data.size() * sizeof(double);
+        total += _col_index.size() * sizeof(size_t);
+        total += _row_ptr.size() * sizeof(size_t);
+        return total;
     }
 
-    explicit StdCRSMatrix(NaiveMatrix &matrix) {
-        _num_rows = matrix.rows();
-        _num_cols = matrix.cols();
-
-        _row_ptr.push_back(0); // Första index är alltid 0
-
-        for (size_t i = 0; i < _num_rows; ++i) {
-            for (size_t j = 0; j < matrix.cols(); ++j) {
-                if (matrix(i, j) != 0) {
-                    _data.push_back(matrix(i, j));
-                    _col_index.push_back(j);
-                }
-            }
-            _row_ptr.push_back(_data.size());
-        }
-    }
 
     std::string str() {
         std::stringstream ss;
@@ -60,9 +37,8 @@ public:
             size_t upper = _row_ptr[i+1];
             ss << i << "\t lower="<<lower << ", upper=" << upper << std::endl;
             for( size_t j = lower; j < upper; ++j) {
-                ss  << i << "\t "<<i<<","<<this->_col_index[j] << ": " << this->_data[j] << ", " << std::endl;
+                ss  << i << "\t "<<","<<this->_col_index[j] << ": " << this->_data[j] << ", " << std::endl;
             }
-            ss << "============" << std::endl;
         }
         return  ss.str();
     }

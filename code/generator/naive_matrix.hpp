@@ -1,29 +1,19 @@
-#ifndef GENERATOR_STD_MATRIX_HPP
-#define GENERATOR_STD_MATRIX_HPP
+#ifndef GENERATOR_NAIVE_MATRIX_HPP
+#define GENERATOR_NAIVE_MATRIX_HPP
+
+#include <cmath>
+#include <functional>
 
 
+#include "../data/naive_matrix.hpp"
 
-
-#include "../data/std_matrix.hpp"
-
-void create_laplacian_1d(StdMatrix &matrix,size_t gridsize){ // 5 for 3 inner nodes and two boundary nodes
-    matrix = StdMatrix(gridsize,gridsize);
+void create_laplacian_2d(NaiveMatrix &matrix,size_t gridsize){ // 5 for 3 inner nodes and two boundary nodes in one direction
+    //std::cout << "create_laplacian_2d(NaiveMatrix&)" << std::endl;
+    matrix = NaiveMatrix(gridsize*gridsize,gridsize*gridsize);
     const size_t rows = matrix.rows();
     const size_t cols = matrix.cols();
-
-    matrix(0,0) = 1;
-    for(int index = 1; index < gridsize-1; ++index) {
-        matrix(index,index+1) = -1;
-        matrix(index,index  ) =  2;
-        matrix(index,index-1) = -1;
-    }
-    matrix(gridsize-1,gridsize-1) = 1;
-}
-
-void create_laplacian_2d(StdMatrix &matrix,size_t gridsize){ // 5 for 3 inner nodes and two boundary nodes in one direction
-    matrix = StdMatrix(gridsize*gridsize,gridsize*gridsize);
-    const size_t rows = matrix.rows();
-    const size_t cols = matrix.cols();
+    //std::cout << "rows = " << rows << std::endl;
+    //std::cout << "cols " << cols << std::endl;
 
     matrix(0,0) = 1;
     for(size_t index_x = 1; index_x < gridsize-1; ++index_x) {
@@ -56,7 +46,5 @@ void create_laplacian_2d(StdMatrix &matrix,size_t gridsize){ // 5 for 3 inner no
     }
     matrix(rows-1,cols-1) = 1;
 }
-
-
 
 #endif

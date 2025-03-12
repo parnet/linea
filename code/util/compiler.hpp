@@ -39,6 +39,7 @@ void print_arch() {
 << "AVX2 "
 #endif
 
+
 #ifdef __AVX512F__
 << "AVX512F "
 #endif

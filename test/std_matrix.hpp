@@ -2,7 +2,8 @@
 #define TEST_STD_MATRIX_HPP
 #include <iostream>
 
-#include "../code/cpu/csrmv.hpp"
+#include "../code/converter/std_crs_matrix.hpp"
+#include "../code/cpu/mv.hpp"
 #include "../code/data/std_matrix.hpp"
 
 void gneral_matrix_test() {
@@ -25,32 +26,32 @@ void gneral_matrix_test() {
     std::cout << matrix.str() << std::endl;
 
     StdVector vector = StdVector(5);
-    vector(0) = 3;
-    vector(1) = 1;
-    vector(2) = -2;
-    vector(3) = 1;
-    vector(4) = 7;
+    vector[0] = 3;
+    vector[1] = 1;
+    vector[2] = -2;
+    vector[3] = 1;
+    vector[4] = 7;
 
     std::cout << vector.str() << std::endl;
     StdVector result = StdVector(5);
-    result(0) = 0;
-    result(1) = 0;
-    result(2) = 0;
-    result(3) = 0;
-    result(4) = 0;
+    result[0] = 0;
+    result[1] = 0;
+    result[2] = 0;
+    result[3]= 0;
+    result[4] = 0;
     std::cout << result.str() << std::endl;
 
     MatrixVectorMultiplikation(matrix,1,vector,1,result);
     std::cout << result.str() << std::endl;
 
-    StdCRSMatrix smatrix = StdCRSMatrix(matrix);
+    StdCRSMatrix smatrix = std_crs_from_matrix(matrix);
     std::cout << smatrix.str() << std::endl;
 
-    result(0) = 0;
-    result(1) = 0;
-    result(2) = 0;
-    result(3) = 0;
-    result(4) = 0;
+    result[0] = 0;
+    result[1] = 0;
+    result[2] = 0;
+    result[3] = 0;
+    result[4] = 0;
     std::cout << result.str() << std::endl;
 
     MatrixVectorMultiplikation(smatrix,1,vector,1,result);

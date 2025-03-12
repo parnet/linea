@@ -1,12 +1,17 @@
 #include <iostream>
 
 // #include "hdf5/version.hpp"
-#include "benchmark/csrmv.hpp"
-#include "code/util/compiler.hpp"
-#include "code/generator/std_matrix.hpp"
-#include "code/openmp/general.hpp"
-void daxpy() { }
-#include "test/std_matrix.hpp"
+//#include "benchmark/csrmv.hpp"
+//#include "code/util/compiler.hpp"
+//#include "code/generator/std_matrix.hpp"
+//#include "code/openmp/general.hpp"
+
+
+//#include "test/std_matrix.hpp"
+
+#include "benchmark/mv.hpp"
+#include "code/blas/mv.hpp"
+#include "test/blas.h"
 
 int main()
 {
@@ -22,8 +27,11 @@ int main()
     // std::cout << matrix.str() << std::endl;
 
     // gneral_matrix_test();
-    benchmark_csrmv();
-    double x;
-    std::cin >> x;
+    //benchmark_mv();
+    //blas_mv_test();
+    //double x;
+    //std::cin >> x;
+    //gneral_matrix_test_blas();
+    benchmark_mv();
     return 0;
 }

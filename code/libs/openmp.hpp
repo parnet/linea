@@ -1,0 +1,4 @@
+#ifndef LINEA_LIB_OPENMP_HPP
+#define LINEA_LIB_OPENMP_HPP
+
+#endif

@@ -8,112 +8,92 @@ if(${CMAKE_BINARY_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
     message(FATAL_ERROR "Inplace builds not allowed! Create a build directory")
 endif ()
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+
+
+
+include_directories(code)
+
+
 # ===================[ parse parameter ]================================================================================
 
 
 # todo add_compile_definitions(USE_LAPACK)
 # todo add_compile_definitions(USE_MKL)
 
+set(OPT_LVL "3" CACHE STRING "Optimization level")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native -O3 -Wall -Wextra -DNDEBUG")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -march=native -O${OPT_LVL} -Wall -Wextra -DNDEBUG -funroll-loops -ftree-vectorize")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -march=native -O${OPT_LVL} -Wall -Wextra -DNDEBUG -funroll-loops -ftree-vectorize")
+
+set(CMAKE_C_FLAGS_DEBUG "-g -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall -Wextra")
 
+set(CMAKE_CXX_FLAGS  ${CMAKE_CXX_FLAGS_RELEASE})
 
-# ===================[ MPI ]============================================================================================
 find_package(PkgConfig QUIET)
-
-find_package(MPI QUIET)
-if (MPI_FOUND)
-    message(STATUS "[X]   MPI was found version: ${MPI_CXX_VERSION}")
-    #message(STATUS "MPI found: ${MPI_CXX_COMPILER}")
-    #message(STATUS "MPI include path: ${MPI_INCLUDE_PATH}")
-    #message(STATUS "MPI libraries: ${MPI_LIBRARIES}")
-    #list(APPEND LINK_LIBRARIES ${MPI_LIBRARIES})
-    #if(CMAKE_CXX_COMPILER)
-    #    message(STATUS ${CMAKE_CXX_COMPILER})
-    #else ()
-    #    message(STATUS "MPICXX set as compiler")
-    #    #set(CMAKE_CXX_COMPILER mpicxx)
-    #endif()
-
-    # -DMPI_C_COMPILER=/path/to/mpicc -DMPI_CXX_COMPILER=/path/to/mpicxx ..
-else()
-    message(STATUS "[ ]   MPI was not found")
-endif()
-# ----------------------------------------------------------------------------------------------------------------------
-find_package(OpenMP QUIET)
-if (OpenMP_FOUND)
-    message(STATUS "[X]   OpenMP was found version: ${OpenMP_CXX_VERSION}") # was found C version ${OpenMP_C_VERSION}, CXX version
-    # todo link against :  -fopenmp -fopenmp-simd  list(APPEND LINK_LIBRARIES OpenMP::OpenMP_CXX)
-    set(OpenMP_LIBRARIES "OpenMP::OpenMP_CXX")
-else ()
-    message(STATUS "[ ]   OpenMP was not found")
+# ===================[ Intrinsics ]=====================================================================================
+set(ENABLE_INTRINSICS "OFF" CACHE STRING "INTRINSICS library usage")
+add_definitions(-DUSE_INTRINSICS=${ENABLE_INTRINSICS})
+# ===================[ MPI ]============================================================================================
+set(ENABLE_MPI "OFF" CACHE STRING "MPI library usage")
+if (ENABLE_MPI)
+    include(cmake/mpi.cmake)
 endif ()
 # ----------------------------------------------------------------------------------------------------------------------
-# todo HIP
-# ----------------------------------------------------------------------------------------------------------------------
-# todo ROCm
-# ----------------------------------------------------------------------------------------------------------------------
-# todo CUDA
-# ----------------------------------------------------------------------------------------------------------------------
-# todo Kokkos
-# ----------------------------------------------------------------------------------------------------------------------
-# todo OpenCL
-# ----------------------------------------------------------------------------------------------------------------------
-find_package(HDF5 QUIET COMPONENTS C CXX)
-# find_package(HDF5)
-if(HDF5_FOUND)
-    message(STATUS "[X]   HDF5_VERSION was found version " ${HDF5_VERSION})
-    include_directories(${HDF5_INCLUDE_DIR})
-    # todo link against : hdf5 hdf5_cpp
-else ()
-    message(STATUS "[ ]   HDF5 was not found")
+set(ENABLE_OPENMP "OFF" CACHE STRING "OpenMP library usage")
+if (ENABLE_OPENMP)
+    include(cmake/openmp.cmake)
 endif ()
 # ----------------------------------------------------------------------------------------------------------------------
-find_package(LAPACK QUIET)
-if(LAPACK_FOUND)
-    if (LAPACK_VERSION STREQUAL "")
-        message(STATUS "[ ]   LAPACK was found: ${LAPACK_VERSION}")
-    else ()
-        pkg_check_modules(LAPACK_PKG QUIET lapack)
-        if(LAPACK_PKG_FOUND)
-            message(STATUS "[X]   LAPACK version: ${LAPACK_PKG_VERSION}")
-        endif ()
-    endif ()
-    # todo link against : lapack
-
-else ()
-    message(STATUS "[ ]   LAPACK was not found")
-endif ()
-
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-find_package(BLAS QUIET)
-
-if(BLAS_FOUND)
-    if (OPENBLAS_VERSION STREQUAL "")
-        message(STATUS "[X]   BLAS was found: ${OPENBLAS_VERSION}")
-    else ()
-        pkg_check_modules(BLAS_PKG QUIET code/blas)
-        if(BLAS_PKG_FOUND)
-            message(STATUS "[X]   BLAS version: ${BLAS_PKG_VERSION}")
-        endif ()
-    endif ()
-    # message(STATUS ${BLAS_LIBRARIES})
-    # target_compile_definitions(Linea PRIVATE -DUSE_BLAS=1)
-    # list(APPEND ${LINK_LIBRARIES} ${BLAS_LIBRARIES})
-else ()
-    message(STATUS "[ ]   BLAS was not found")
+set(ENABLE_CUDA "OFF" CACHE STRING "CUDA library usage")
+if (ENABLE_CUDA)
+    include(cmake/cuda.cmake)
 endif ()
 # ----------------------------------------------------------------------------------------------------------------------
-find_package(IntelMKL QUIET)
-
-if (IntelMKL_FOUND)
-    message(STATUS "[ ]   Intel MKL was found version: ${IntelMKL_VERSION}")
-
-else ()
-    message(STATUS "[ ]   Intel MKL was not found")
+set(ENABLE_ROCM "OFF" CACHE STRING "ROCm library usage")
+if (ENABLE_ROCM)
+    include(cmake/rocm.cmake)
+endif ()
+# ----------------------------------------------------------------------------------------------------------------------
+set(ENABLE_HIP "OFF" CACHE STRING "HIP library usage")
+if (ENABLE_HIP)
+    include(cmake/hip.cmake)
+endif ()
+# ----------------------------------------------------------------------------------------------------------------------
+set(ENABLE_KOKKOS "OFF" CACHE STRING "KOKKOS library usage")
+if (ENABLE_KOKKOS)
+    include(cmake/kokkos.cmake)
+endif ()
+# ----------------------------------------------------------------------------------------------------------------------
+set(ENABLE_OPENCL "OFF" CACHE STRING "OPENCL library usage")
+if (ENABLE_OPENCL)
+    include(cmake/opencl.cmake)
+endif ()
+# ----------------------------------------------------------------------------------------------------------------------
+set(ENABLE_HDF5 "ON" CACHE STRING "HDF5 library usage")
+if (ENABLE_HDF5)
+    include(cmake/hdf5.cmake)
+endif ()
+# ----------------------------------------------------------------------------------------------------------------------
+set(ENABLE_BLAS "ON" CACHE STRING "BLAS library usage")
+if (ENABLE_BLAS)
+    include(cmake/blas.cmake)
+endif ()
+# ----------------------------------------------------------------------------------------------------------------------
+set(ENABLE_LAPACK "ON" CACHE STRING "LAPACK library usage")
+if (ENABLE_LAPACK)
+    include(cmake/lapack.cmake)
+endif ()
+# ----------------------------------------------------------------------------------------------------------------------
+set(ENABLE_MKL "ON" CACHE STRING "MKL library usage")
+if (ENABLE_MKL)
+    include(cmake/mkl.cmake)
+endif ()
+# ----------------------------------------------------------------------------------------------------------------------
+set(ENABLE_LUA "OFF" CACHE STRING "LUA library usage")
+if (ENABLE_LUA)
+    include(cmake/lua.cmake)
 endif ()
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -132,7 +112,7 @@ add_executable(${PROJECT_NAME}
         code/data/std_vector.hpp
         code/data/std_matrix.hpp
         code/generator/std_matrix.hpp
-        code/generator/naive_matrix.h
+        code/generator/naive_matrix.hpp
         code/cpu/csrmv.hpp
         test/std_matrix.hpp
         code/openmp/csrmv.hpp
@@ -140,6 +120,37 @@ add_executable(${PROJECT_NAME}
         code/cpu/dot.hpp
         benchmark/csrmv.hpp
         code/util/converter.hpp
+        code/util/measurement.hpp
+        code/generator/std_vector.hpp
+        code/converter/std_crs_matrix.hpp
+        code/generator/naive_vector.hpp
+        code/generator/std_flat_matrix.hpp
+        code/generator/std_crs_matrix.hpp
+        benchmark/mv.hpp
+        code/cpu/mv.hpp
+        code/cpu/norm.hpp
+        code/blas/mv.hpp
+        test/blas.h
+        code/openmp/mv.hpp
+        code/simd/mv.hpp
+        code/util/modules.hpp
+        code/libs/openmp.hpp
+        code/libs/sycl.hpp
+        code/libs/rocm.hpp
+        code/libs/opencl.hpp
+        code/libs/openacc.hpp
+        code/libs/mpi.hpp
+        code/libs/mkl.hpp
+        code/libs/lapack.hpp
+        code/libs/lua.hpp
+        code/libs/kokkos.hpp
+        code/libs/hip.hpp
+        code/libs/hdf5.hpp
+        code/libs/cuda.hpp
+        code/libs/blas.hpp
+        code/libs/intrinsics.hpp
+        code/blas/__lib_all.h
+        code/simd/csrmv.h
 )
 
 
@@ -156,6 +167,7 @@ message(STATUS "CXX flags: ${CMAKE_CXX_FLAGS}")
 MESSAGE(STATUS "${OpenMP_LIBRARIES}")
 #target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_CXX)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenMP_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${BLAS_LIBRARIES})
 
 
 # ===================[ project properties  ]============================================================================

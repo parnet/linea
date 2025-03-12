@@ -1,20 +1,12 @@
-#ifndef GENERATOR_NAIVE_MATRIX_HPP
-#define GENERATOR_NAIVE_MATRIX_HPP
-
-#include <cmath>
-#include <functional>
+#ifndef GENERATOR_STD_FLAT_MATRIX_HPP
+#define GENERATOR_STD_FLAT_MATRIX_HPP
+#include "../data/std_flat_matrix.hpp"
 
 
-#include "../data/naive_matrix.hpp"
-
-
-void create_laplacian_2d(NaiveMatrix &matrix,size_t gridsize){ // 5 for 3 inner nodes and two boundary nodes in one direction
-    //std::cout << "create_laplacian_2d(NaiveMatrix&)" << std::endl;
-    matrix = NaiveMatrix(gridsize*gridsize,gridsize*gridsize);
+void create_laplacian_2d(StdFlatMatrix &matrix,size_t gridsize){ // 5 for 3 inner nodes and two boundary nodes in one direction
+    matrix = StdFlatMatrix(gridsize*gridsize,gridsize*gridsize);
     const size_t rows = matrix.rows();
     const size_t cols = matrix.cols();
-    //std::cout << "rows = " << rows << std::endl;
-    //std::cout << "cols " << cols << std::endl;
 
     matrix(0,0) = 1;
     for(size_t index_x = 1; index_x < gridsize-1; ++index_x) {

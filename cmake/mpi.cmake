@@ -1,0 +1,12 @@
+
+find_package(MPI REQUIRED)
+if (MPI_FOUND)
+    message(STATUS "[X]   MPI was found version: ${MPI_CXX_VERSION}")
+    message(STATUS " |        - Compiler: ${MPI_CXX_COMPILER}")
+    message(STATUS " |        - include-path: ${MPI_INCLUDE_PATH}")
+    message(STATUS " |        - libraries: ${MPI_LIBRARIES}")
+    message(STATUS " ")
+    #list(APPEND LINK_LIBRARIES ${MPI_LIBRARIES})
+else()
+    message(STATUS "[ ]   MPI was not found")
+endif()

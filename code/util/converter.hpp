@@ -31,4 +31,26 @@ double convert(size_t value, Unit unit ) {
             return value;
     }
 }
+
+std::string symbol(Unit unit ) {
+    switch (unit) {
+        case NONE:
+            return "B";
+        case Kilo:
+            return "KiB";
+        case Mega:
+            return "MiB";
+        case Giga:
+            return "GiB";
+        case Terra:
+            return "TiB";
+        case Peta:
+            return "PiB";
+        case Exa:
+            return "EiB";
+        default:
+            return "Undefined";
+    }
+}
+
 #endif

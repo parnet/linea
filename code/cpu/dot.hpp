@@ -1,6 +1,8 @@
-#ifndef DOT_HPP
-#define DOT_HPP
+#ifndef CPU_DOT_HPP
+#define CPU_DOT_HPP
+
 #include "../data/std_vector.hpp"
+
 double ScalarProduct(const StdVector & vector_x, const StdVector & vector_y) {
   double sum = 0.0;
   for(size_t i = 0; i < vector_x.size(); ++i) {

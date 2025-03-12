@@ -1,0 +1,15 @@
+find_package(LAPACK QUIET)
+if(LAPACK_FOUND)
+    if (LAPACK_VERSION STREQUAL "")
+        message(STATUS "[X]   LAPACK was found: ${LAPACK_VERSION}")
+    else ()
+        pkg_check_modules(LAPACK_PKG QUIET lapack)
+        if(LAPACK_PKG_FOUND)
+            message(STATUS "[X]   LAPACK version: ${LAPACK_PKG_VERSION}")
+        endif ()
+    endif ()
+    # todo link against : lapack
+
+else ()
+    message(STATUS "[ ]   LAPACK was not found")
+endif ()

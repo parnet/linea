@@ -48,3 +48,38 @@ if (hipsparse_FOUND)
 else ()
     message(STATUS "hipsparse not found on the system")
 endif ()
+get_target_property(target_type hip::host TYPE)
+message(STATUS "hip::host is of type: ${target_type}")
+
+
+
+target_link_libraries(hipxampel )
+target_link_libraries(hipsparse-test PRIVATE hip::host hip::hipBLAS)
+target_link_libraries(hipsparse-test PRIVATE hip::host hip::hipBLAS)
+target_link_libraries(hipblas_example PRIVATE hip::device /opt/rocm/lib/libhipsparse.so)
+target_link_libraries(hipblas_example PRIVATE hip::device /opt/rocm/lib/libhipsparse.so)
+
+execute_process(
+        COMMAND hipconfig --version
+        OUTPUT_VARIABLE HIP_VERSION
+        ERROR_VARIABLE HIP_VERSION_ERROR
+        RESULT_VARIABLE HIP_VERSION_RESULT
+)
+
+
+# Check if the command was successful
+if (NOT HIP_VERSION_RESULT EQUAL 0)
+    message(FATAL_ERROR "Failed to get HIP version. Error: ${HIP_VERSION_ERROR}")
+else()
+    message(STATUS "HIP Version: ${HIP_VERSION}")
+endif()
+
+message(STATUS "hip include directory: ${HIP_INCLUDE_DIRS}")
+message(STATUS "hip library directory: ${HIP_LIBRARIES}")
+message(STATUS "HIP compiler: ${HIP_HIPCC_EXECUTABLE}")
+
+get_target_property(TARGETS hip::host IMPORTED_LOCATION)
+message(STATUS "hip::host found at: ${TARGETS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --target=amd-amdhsa --offload-arch=gfx1100")
+set(CMAKE_CXX_COMPILER "${HIP_HIPCC_EXECUTABLE}")
+#project(hipBLAS_example LANGUAGES HIP CXX)

@@ -2,6 +2,7 @@
 #define OPENMP_GENERAL_HPP
 
 
+#include <iostream>
 #include <omp.h>
 
 namespace linea::openmp {

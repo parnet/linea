@@ -1,7 +1,8 @@
-
 #ifndef OPERATIONS_BLAS_HPP
 #define OPERATIONS_BLAS_HPP
-#include <cblas.h> // OpenBLAS  or Intel MKL
+#ifdef USE_BLASE
+#include "libs/blas.hpp"
+
 
 #include <vector>
 
@@ -23,4 +24,5 @@ inline void Operations_BLAS:: matrix_vector_multiplication(const Matrix & matrix
                 beta,            // Scalar beta
                 vektor_y._data.data(), 1);    // Vector y and increment
 }
+#endif
 #endif

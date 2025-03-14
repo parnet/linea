@@ -8,16 +8,19 @@
 
 void create_laplacian_1d(Std_Matrix &matrix,size_t gridsize){ // 5 for 3 inner nodes and two boundary nodes
     matrix = Std_Matrix(gridsize,gridsize);
-    const size_t rows = matrix.rows();
     const size_t cols = matrix.cols();
 
     matrix(0,0) = 1;
-    for(int index = 1; index < gridsize-1; ++index) {
+    for(size_t index = 1; index < gridsize-1; ++index) {
         matrix(index,index+1) = -1;
         matrix(index,index  ) =  2;
         matrix(index,index-1) = -1;
     }
     matrix(gridsize-1,gridsize-1) = 1;
+}
+
+inline size_t matrix_memory_size_laplacian_2d(size_t gridsize) {
+    return gridsize*gridsize*gridsize*gridsize*sizeof(double);
 }
 
 void create_laplacian_2d(Std_Matrix &matrix,size_t gridsize){ // 5 for 3 inner nodes and two boundary nodes in one direction

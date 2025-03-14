@@ -1,4 +1,6 @@
+
 #include "libs/intrinsics.hpp"
+#ifdef USE_AVX512
 #include "operations_avx512.hpp"
 
 void Operations_AVX512::matrix_vector_multiplikation(const Matrix &matrix_A, double alpha, const Vector &vektor_x,double beta , Vector &vektor_y) {
@@ -62,3 +64,4 @@ void Operations_AVX512::matrix_vector_multiplikation(const CRS_Matrix &matrix_A,
         vektor_y[i] += _mm512_reduce_add_pd(sum_vec);
     }
 }
+#endif

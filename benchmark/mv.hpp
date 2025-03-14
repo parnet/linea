@@ -6,6 +6,8 @@
 #include "operations_avx.hpp"
 #include "operations_avx512.hpp"
 #include "operations_cpu.hpp"
+#include "operations_cublas.hpp"
+#include "operations_cuda_kernel.hpp"
 #include "operations_mkl.hpp"
 #include "operations_sse2.hpp"
 #include "../code/operations_blas.hpp"
@@ -504,6 +506,9 @@ void _benchmark_mv(){
     for (int k = 3; k < 257; k+=8) {
 
         size_t gridsize = k;
+        if (convert(matrix_memory_size_laplacian_2d(gridsize),Giga) > 4.1) {
+            break;
+        }
         std::cout << "gridsize="<<k<<std::endl;
         std::cout <<"vectorsize="<<gridsize*gridsize<<std::endl;
         std::cout<<"matrixsize="<< gridsize*gridsize*gridsize*gridsize << std::endl;
@@ -511,6 +516,7 @@ void _benchmark_mv(){
 
         timer.start();
         create_laplacian_2d(matrix,gridsize);
+        std::cout << "memory="<< convert(matrix.memory_size(),Giga) << std::endl;
         timer.stop();
         time = timer.get();
         //std::cout << "time(laplacian)="<< time << std::endl;
@@ -548,11 +554,24 @@ void _benchmark_mv(){
 };
 
 void benchmark_mv() {
-    _benchmark_mv<Operations_CPU>();
-    _benchmark_mv<Operations_SSE2>();
+    //_benchmark_mv<Operations_CPU>();
+#ifdef USE_SSE2
+    //_benchmark_mv<Operations_SSE2>();
+#endif
+#ifdef USE_AVX
     _benchmark_mv<Operations_AVX>();
+#endif
+#ifdef USE_AVX512
     _benchmark_mv<Operations_AVX512>();
+#endif
+
+#ifdef USE_OPENMP
     _benchmark_mv<Operations_OpenMP>();
+#endif
+#ifdef USE_CUDA
+    _benchmark_mv<Operations_CUDA_Kernel>();
+    _benchmark_mv<Operations_cuBLAS>();
+#endif
     //_benchmark_mv<Operations_BLAS>();
     //_benchmark_mv<Operations_MKL>();
 }

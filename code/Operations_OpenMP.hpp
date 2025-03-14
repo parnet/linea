@@ -1,8 +1,8 @@
 #ifndef OPERATIONS_OPENMP_HPP
 #define OPERATIONS_OPENMP_HPP
 
-
-
+#include "libs/openmp.hpp"
+#ifdef USE_OPENMP
 #include "data/matrix.hpp"
 #include "data/vector.hpp"
 #include "data/crs_matrix.hpp"
@@ -18,6 +18,6 @@ struct Operations_OpenMP {
 
     static double norm(const Vector &vector_x);
 };
-
+#endif
 
 #endif

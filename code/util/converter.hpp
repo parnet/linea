@@ -11,7 +11,7 @@ enum Unit {
     Exa
 };
 
-double convert(size_t value, Unit unit ) {
+inline double convert(size_t value, Unit unit ) {
     switch (unit) {
         case NONE:
             return value;
@@ -32,7 +32,7 @@ double convert(size_t value, Unit unit ) {
     }
 }
 
-std::string symbol(Unit unit ) {
+inline std::string symbol(Unit unit ) {
     switch (unit) {
         case NONE:
             return "B";

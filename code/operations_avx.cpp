@@ -1,8 +1,6 @@
-
-#include "operations_avx.hpp"
-
 #include "libs/intrinsics.hpp"
-
+#ifdef USE_AVX
+#include "operations_avx.hpp"
 void Operations_AVX::matrix_vector_multiplikation(const Matrix &matrix_A, double alpha,
                                                 const Vector &vektor_x, double beta, Vector &vektor_y) {
     const size_t mr = matrix_A._num_rows;
@@ -36,3 +34,4 @@ void Operations_AVX::matrix_vector_multiplikation(const Matrix &matrix_A, double
         vektor_y._data[i] += alpha * total_sum;
     }
 }
+#endif

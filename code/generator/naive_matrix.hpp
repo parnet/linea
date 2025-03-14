@@ -5,11 +5,11 @@
 #include <functional>
 
 
-#include "../data/naive_matrix.hpp"
+#include "../data/c_matrix.hpp"
 
-void create_laplacian_2d(NaiveMatrix &matrix,size_t gridsize){ // 5 for 3 inner nodes and two boundary nodes in one direction
+void create_laplacian_2d(C_Matrix &matrix,size_t gridsize){ // 5 for 3 inner nodes and two boundary nodes in one direction
     //std::cout << "create_laplacian_2d(NaiveMatrix&)" << std::endl;
-    matrix = NaiveMatrix(gridsize*gridsize,gridsize*gridsize);
+    matrix = C_Matrix(gridsize*gridsize,gridsize*gridsize);
     const size_t rows = matrix.rows();
     const size_t cols = matrix.cols();
     //std::cout << "rows = " << rows << std::endl;

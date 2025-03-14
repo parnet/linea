@@ -1,10 +1,10 @@
 #ifndef GENERATOR_STD_FLAT_MATRIX_HPP
 #define GENERATOR_STD_FLAT_MATRIX_HPP
-#include "../data/std_flat_matrix.hpp"
+#include "../data/matrix.hpp"
 
 
-void create_laplacian_2d(StdFlatMatrix &matrix,size_t gridsize){ // 5 for 3 inner nodes and two boundary nodes in one direction
-    matrix = StdFlatMatrix(gridsize*gridsize,gridsize*gridsize);
+void create_laplacian_2d(Matrix &matrix,size_t gridsize){ // 5 for 3 inner nodes and two boundary nodes in one direction
+    matrix = Matrix(gridsize*gridsize,gridsize*gridsize);
     const size_t rows = matrix.rows();
     const size_t cols = matrix.cols();
 

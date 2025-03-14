@@ -6,8 +6,8 @@
 
 #include "../data/std_matrix.hpp"
 
-void create_laplacian_1d(StdMatrix &matrix,size_t gridsize){ // 5 for 3 inner nodes and two boundary nodes
-    matrix = StdMatrix(gridsize,gridsize);
+void create_laplacian_1d(Std_Matrix &matrix,size_t gridsize){ // 5 for 3 inner nodes and two boundary nodes
+    matrix = Std_Matrix(gridsize,gridsize);
     const size_t rows = matrix.rows();
     const size_t cols = matrix.cols();
 
@@ -20,8 +20,8 @@ void create_laplacian_1d(StdMatrix &matrix,size_t gridsize){ // 5 for 3 inner no
     matrix(gridsize-1,gridsize-1) = 1;
 }
 
-void create_laplacian_2d(StdMatrix &matrix,size_t gridsize){ // 5 for 3 inner nodes and two boundary nodes in one direction
-    matrix = StdMatrix(gridsize*gridsize,gridsize*gridsize);
+void create_laplacian_2d(Std_Matrix &matrix,size_t gridsize){ // 5 for 3 inner nodes and two boundary nodes in one direction
+    matrix = Std_Matrix(gridsize*gridsize,gridsize*gridsize);
     const size_t rows = matrix.rows();
     const size_t cols = matrix.cols();
 

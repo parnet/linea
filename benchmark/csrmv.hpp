@@ -7,7 +7,7 @@
 #include "../code/generator/naive_matrix.hpp"
 #include "../code/generator/std_vector.hpp"
 #include "../code/data/std_matrix.hpp"
-#include "../code/data/naive_matrix.hpp"
+#include "../code/data/c_matrix.hpp"
 #include "../code/util/converter.hpp"
 #include "../code/util/timer.hpp"
 

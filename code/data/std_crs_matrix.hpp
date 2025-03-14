@@ -3,15 +3,21 @@
 
 #include <utility>
 #include <vector>
-#include "naive_matrix.hpp"
 #include "std_matrix.hpp"
 
 
-class StdCRSMatrix {
-public:
-    StdCRSMatrix() = default;
 
-    StdCRSMatrix(size_t num_rows, size_t num_cols, std::vector<double> data,
+class Std_CRS_Matrix {
+public:
+    Std_CRS_Matrix() = default;
+
+    // todo copy constructor
+    // todo copy operator
+    // todo move constructor
+    // todo move operator
+    // todo destructor
+
+    Std_CRS_Matrix(size_t num_rows, size_t num_cols, std::vector<double> data,
                  std::vector<size_t> col_index,
                  std::vector<size_t> row_ptr) : _num_rows(num_rows),
                                                 _num_cols(num_cols),

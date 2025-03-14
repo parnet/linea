@@ -101,23 +101,19 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(${PROJECT_NAME}
         main.cpp
-        code/data/naive_vector.hpp
+        code/data/c_vector.hpp
         code/util/compiler.hpp
         code/hdf5/parallel_file.hpp
         code/hdf5/version.hpp
         code/util/version.hpp
-        code/data/naive_matrix.hpp
+        code/data/c_matrix.hpp
         code/data/std_crs_matrix.hpp
-        code/data/std_flat_matrix.hpp
-        code/data/std_vector.hpp
+        code/data/matrix.hpp
+        code/data/vector.hpp
         code/data/std_matrix.hpp
         code/generator/std_matrix.hpp
         code/generator/naive_matrix.hpp
-        code/cpu/csrmv.hpp
         test/std_matrix.hpp
-        code/openmp/csrmv.hpp
-        code/openmp/general.hpp
-        code/cpu/dot.hpp
         benchmark/csrmv.hpp
         code/util/converter.hpp
         code/util/measurement.hpp
@@ -128,11 +124,9 @@ add_executable(${PROJECT_NAME}
         code/generator/std_crs_matrix.hpp
         benchmark/mv.hpp
         code/cpu/mv.hpp
-        code/cpu/norm.hpp
-        code/blas/mv.hpp
+        code/operations_blas.hpp
         test/blas.h
-        code/openmp/mv.hpp
-        code/simd/mv.hpp
+        code/Operations_OpenMP.hpp
         code/util/modules.hpp
         code/libs/openmp.hpp
         code/libs/sycl.hpp
@@ -149,8 +143,31 @@ add_executable(${PROJECT_NAME}
         code/libs/cuda.hpp
         code/libs/blas.hpp
         code/libs/intrinsics.hpp
-        code/blas/__lib_all.h
+        code/libs/__lib_blas.h
         code/simd/csrmv.h
+        code/operations_cpu.hpp
+        code/operations_sse2.hpp
+        code/operations_avx.hpp
+        code/operations_avx512.hpp
+        code/operations_avx512.cpp
+        code/operations_avx.cpp
+        code/operations_nonopt.hpp
+        code/operations_nonopt.cpp
+        code/data/c_aligned_matrix.hpp
+        code/data/std_flat_matrix.hpp
+        code/util/aligned_allocator.hpp
+        code/data/c_aligned_vector.hpp
+        code/data/crs_matrix.hpp
+        code/data/std_vector.hpp
+        code/data/std_aligned_vector.hpp
+        code/data/std_aligned_matrix.hpp
+        code/operations_cpu_nonconst.cpp
+        code/operations_cpu_nonconst.hpp
+        code/operations_mkl.hpp
+        code/Operations_OpenMP.cpp
+        code/operations_sse2.cpp
+        code/operations_cpu.cpp
+        benchmark/datastructures.hpp
 )
 
 

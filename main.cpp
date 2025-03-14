@@ -10,7 +10,7 @@
 //#include "test/std_matrix.hpp"
 
 #include "benchmark/mv.hpp"
-#include "code/blas/mv.hpp"
+#include "code/operations_blas.hpp"
 #include "test/blas.h"
 
 int main()
@@ -32,6 +32,17 @@ int main()
     //double x;
     //std::cin >> x;
     //gneral_matrix_test_blas();
+    //benchmark_mv();
+    std::cout <<  2* (1 << 7) +1  << std::endl;
     benchmark_mv();
+
     return 0;
 }
+
+/***
+ * dense max matrix size gridsize = 257
+ * 257 * 257 total grid points
+ * 257 * 257 x 257 * 257 matrix size
+ * 66'049 x 66'049
+ * 4'362'470'401 Einträge insgesamt
+ ***/

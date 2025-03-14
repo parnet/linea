@@ -31,4 +31,5 @@ private:
     uint8_t _minnum = 0;
     uint8_t _relnum = 0;
 };
+
 #endif

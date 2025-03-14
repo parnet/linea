@@ -1,35 +1,35 @@
-#ifndef DATA_STD_VECTOR_HPP
-#define DATA_STD_VECTOR_HPP
+#ifndef DATA_C_VECTOR_HPP
+#define DATA_C_VECTOR_HPP
 
-#include <vector>
-
-
-
+#include <sstream>
+#include <string>
 
 
-class Std_Vector {
+
+
+class C_Vector {
 public:
-    Std_Vector() = default;
+    C_Vector() = default;
 
-    explicit Std_Vector(size_t num_elements) : _num_elements(num_elements) {
-        _data.resize(num_elements);
+    explicit C_Vector(size_t num_elements) : _num_elements(num_elements) {
+        _data = new double[num_elements];
+
 
     }
 
-    Std_Vector(const Std_Vector &other) :_num_elements(other._num_elements){
-        _data.resize(_num_elements);
+    C_Vector(const C_Vector &other) :_num_elements(other._num_elements){
+        _data = new double[_num_elements];
+
         for (size_t i = 0; i < _num_elements; ++i) {
             _data[i] = other._data[i];
         }
     }
 
-    Std_Vector(Std_Vector &&other){
-        this->_num_elements = other._num_elements;
-        std::swap(_data, other._data);
-    }
 
-    Std_Vector &operator=(const Std_Vector &other) {
-        _data.resize(_num_elements);
+    C_Vector &operator=(const C_Vector &other) {
+        delete[] _data;
+        _num_elements = other._num_elements;
+        _data = new double[_num_elements];
         for (size_t i = 0; i < _num_elements; ++i) {
             _data[i] = other._data[i];
         }
@@ -37,13 +37,17 @@ public:
     }
 
 
-    Std_Vector &operator=(Std_Vector &&other) noexcept {
+    C_Vector &operator=(C_Vector &&other) noexcept {
         this->_num_elements = other._num_elements;
         std::swap(_data, other._data);
         return *this;
     }
 
-    ~Std_Vector() = default;
+    ~C_Vector() {
+        delete[] _data;
+    }
+
+
 
     double operator[](size_t index) const {
         return _data[index];
@@ -57,7 +61,7 @@ public:
         return _num_elements;
     }
 
-    size_t memory_size() {
+    size_t memory_size() const {
         size_t total = 0;
         total += sizeof(size_t)*1;
         total += sizeof(double)*_num_elements;
@@ -73,8 +77,10 @@ public:
         return ss.str();
     }
 public:
-    size_t _num_elements;
-    std::vector<double> _data;
+    size_t _num_elements{};
+    double * _data;
 };
+
+
 
 #endif

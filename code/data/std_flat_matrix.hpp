@@ -1,19 +1,22 @@
-#ifndef DATA_STD_FLAT_MATRIX_HPP
-#define DATA_STD_FLAT_MATRIX_HPP
+#ifndef STD_FLAT_MATRIX_HPP
+#define STD_FLAT_MATRIX_HPP
+
 #include <sstream>
 #include <string>
 #include <vector>
 
-class StdFlatMatrix {
-public:
-    StdFlatMatrix() = default;
 
-    explicit StdFlatMatrix(size_t num_rows, size_t num_cols) : _num_rows(num_rows), _num_cols(num_cols) {
+
+class Std_Flat_Matrix {
+public:
+    Std_Flat_Matrix() = default;
+
+    explicit Std_Flat_Matrix(size_t num_rows, size_t num_cols) : _num_rows(num_rows), _num_cols(num_cols) {
         _num_elements = _num_cols*num_rows;
         _data.resize(_num_elements);
     }
 
-    StdFlatMatrix(const StdFlatMatrix &other) :_num_elements(other._num_elements){
+    Std_Flat_Matrix(const Std_Flat_Matrix &other) :_num_elements(other._num_elements){
         _num_elements = other._num_elements;
         _num_rows = other._num_rows;
         _num_cols = other._num_cols;
@@ -23,14 +26,14 @@ public:
         }
     }
 
-    StdFlatMatrix(StdFlatMatrix &&other) noexcept {
+    Std_Flat_Matrix(Std_Flat_Matrix &&other) noexcept {
         _num_elements = other._num_elements;
         _num_rows = other._num_rows;
         _num_cols = other._num_cols;
         std::swap(_data,other._data);
     }
 
-    StdFlatMatrix &operator=(const StdFlatMatrix &other) {
+    Std_Flat_Matrix &operator=(const Std_Flat_Matrix &other) {
         _num_elements = other._num_elements;
         _num_rows = other._num_rows;
         _num_cols = other._num_cols;
@@ -40,7 +43,7 @@ public:
         }
     }
 
-    StdFlatMatrix &operator=(StdFlatMatrix &&other) noexcept {
+    Std_Flat_Matrix &operator=(Std_Flat_Matrix &&other) noexcept {
         _num_elements = other._num_elements;
         _num_rows = other._num_rows;
         _num_cols = other._num_cols;
@@ -48,7 +51,7 @@ public:
         return *this;
     }
 
-    ~StdFlatMatrix() = default;
+    ~Std_Flat_Matrix() = default;
 
     double operator()(size_t row_index, size_t col_index) const {
         return _data[row_index * this->_num_rows+col_index];
@@ -91,4 +94,4 @@ public:
     size_t _num_cols;
     std::vector<double> _data;
 };
-#endif
+#endif //STD_FLAT_MATRIX_HPP

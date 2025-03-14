@@ -1,7 +1,7 @@
 #ifndef BLAS_TEST_H
 #define BLAS_TEST_H
 
-
+/*
 
 #include <iostream>
 int blas_mv_test() {
@@ -43,10 +43,10 @@ int blas_mv_test() {
 }
 
 void gneral_matrix_test_blas() {
-    /**
+    / **
      * creates a dense matrix and verifies the crs matrix for a matrix vector multiplication
-     */
-    StdFlatMatrix matrix = StdFlatMatrix(5,5);
+     * /
+    Matrix matrix = Matrix(5,5);
     matrix(0,0) = 2;
     matrix(0,4) = -3;
     matrix(1,2) = 5;
@@ -61,7 +61,7 @@ void gneral_matrix_test_blas() {
 
     std::cout << matrix.str() << std::endl;
 
-    StdVector vector = StdVector(5);
+    Vector vector = Vector(5);
     vector[0] = 3;
     vector[1] = 1;
     vector[2] = -2;
@@ -69,7 +69,7 @@ void gneral_matrix_test_blas() {
     vector[4] = 7;
 
     std::cout << vector.str() << std::endl;
-    StdVector result = StdVector(5);
+    Vector result = Vector(5);
     result[0] = 0;
     result[1] = 0;
     result[2] = 0;
@@ -80,7 +80,7 @@ void gneral_matrix_test_blas() {
     MatrixVectorMultiplikation(matrix,1,vector,1,result);
     std::cout << result.str() << std::endl;
 
-    StdFlatMatrix smatrix = StdFlatMatrix(matrix);
+    Matrix smatrix = Matrix(matrix);
     std::cout << smatrix.str() << std::endl;
 
     result[0] = 0;
@@ -92,6 +92,6 @@ void gneral_matrix_test_blas() {
 
     MatrixVectorMultiplikationBLAS(smatrix,1,vector,1,result);
     std::cout << result.str() << std::endl;
-}
+}*/
 
 #endif

@@ -1,16 +1,17 @@
-//
-// Created by maro on 2025-03-06.
-//
+#ifndef DATA_C_MATRIX_HPP
+#define DATA_C_MATRIX_HPP
 
-#ifndef DATA_NAIVE_MATRIX_HPP
-#define DATA_NAIVE_MATRIX_HPP
 #include <sstream>
 
-class NaiveMatrix {
-public:
-    NaiveMatrix() = default;
 
-    explicit NaiveMatrix(size_t num_rows, size_t num_cols) : _num_rows(num_rows), _num_cols(num_cols) {
+
+
+
+class C_Matrix {
+public:
+    C_Matrix() = default;
+
+    explicit C_Matrix(size_t num_rows, size_t num_cols) : _num_rows(num_rows), _num_cols(num_cols) {
         //std::cout << "NaiveMatrix::Constructor(size_t,size_t)" << std::endl;
         _num_elements = _num_cols*_num_rows;
         //std::cout << "size(A)="<< _num_elements << std::endl;
@@ -21,7 +22,7 @@ public:
 
     }
 
-    NaiveMatrix(const NaiveMatrix &other) :_num_elements(other._num_elements){
+    C_Matrix(const C_Matrix &other) :_num_elements(other._num_elements){
         //std::cout << "NaiveMatrix::CopyConstructor(const NaiveMatrix&)" << std::endl;
         size_t alignment =  64;
         _num_cols = other._num_cols;
@@ -35,7 +36,7 @@ public:
         }
     }
 
-    NaiveMatrix(NaiveMatrix &&other) {
+    C_Matrix(C_Matrix &&other) {
         //std::cout << "NaiveMatrix::NaiveMatrix(const NaiveMatrix&&)" << std::endl;
         if (_data != nullptr) {
             delete[] _data;
@@ -49,7 +50,7 @@ public:
 
     }
 
-    NaiveMatrix &operator=(const NaiveMatrix &other) {
+    C_Matrix &operator=(const C_Matrix &other) {
         size_t alignment = 64;
         //std::cout << "NaiveMatrix::operator=(const NaiveMatrix&)" << std::endl;
         if (this == &other) {return *this;}
@@ -73,7 +74,7 @@ public:
         return *this;
     }
 
-    NaiveMatrix &operator=(NaiveMatrix &&other) noexcept{
+    C_Matrix &operator=(C_Matrix &&other) noexcept{
         //std::cout << "NaiveMatrix::operator=(const NaiveMatrix&&)" << std::endl;
         if (this == &other) {return *this;}
         if (_data != nullptr) {
@@ -89,7 +90,7 @@ public:
         return *this;
     }
 
-    ~NaiveMatrix() {
+    ~C_Matrix() {
         //std::cout << "Destructor(NaiveMatrix)" << std::endl;
 
         delete[] _data;
@@ -132,9 +133,9 @@ public:
         return  ss.str();
     }
 public:
-    size_t _num_elements;
-    size_t _num_rows;
-    size_t _num_cols;
+    size_t _num_elements{};
+    size_t _num_rows{};
+    size_t _num_cols{};
     double * _data = nullptr;
 };
 #endif

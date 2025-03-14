@@ -5,7 +5,7 @@
 
 #include "../data/std_crs_matrix.hpp"
 
-StdCRSMatrix create_laplacian_2d(size_t gridsize){ // 5 for 3 inner nodes and two boundary nodes in one direction
+CRS_Matrix create_laplacian_2d(size_t gridsize){ // 5 for 3 inner nodes and two boundary nodes in one direction
 
     const size_t num_elems_boundary = 2*gridsize + 2*(gridsize-2);
     const size_t num_elems_inner = (gridsize-2)*(gridsize-2)*5;
@@ -99,7 +99,7 @@ StdCRSMatrix create_laplacian_2d(size_t gridsize){ // 5 for 3 inner nodes and tw
         row_ptr[index] = row_ptr[index-1]+1;
     }
 
-    matrix = StdCRSMatrix(rows, cols, data, col_index, row_ptr);
+    matrix = CRS_Matrix(rows, cols, data, col_index, row_ptr);
 
 
     //std::cout << std::endl;

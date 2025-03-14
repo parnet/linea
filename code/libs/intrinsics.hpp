@@ -4,10 +4,14 @@
 #ifdef USE_INTRINSICS
 #if defined(__AVX512F__)
 #include <immintrin.h>  // AVX
+#elif defined(__AVX__)
+#include <immintrin.h>  // AVX
 #elif defined(__SSE3__)
 #include <pmmintrin.h>  // SSE3
 #elif defined(__SSE2__)
 #include <emmintrin.h>  // SSE2
+#elif defined(__SSE__)
+#include <emmintrin.h>
 #endif
 #endif
 

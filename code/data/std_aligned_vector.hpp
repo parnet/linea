@@ -1,37 +1,35 @@
-#ifndef DATA_NAIVE_VECTOR_HPP
-#define DATA_NAIVE_VECTOR_HPP
-#include <sstream>
+#ifndef STD_ALIGNED_VECTOR_HPP
+#define STD_ALIGNED_VECTOR_HPP
+
 #include <string>
+#include <vector>
 
-class NaiveVector {
+
+
+
+class Std_Aligned_Vector {
 public:
+    Std_Aligned_Vector() = default;
 
-    explicit NaiveVector(size_t num_elements) : _num_elements(num_elements) {
-        size_t alignment = 64;
-        // _data = new double[num_elements];
-        _data  = static_cast<double*>(std::aligned_alloc(alignment, _num_elements * sizeof(double)));
+    explicit Std_Aligned_Vector(size_t num_elements) : _num_elements(num_elements) {
+        _data.resize(num_elements);
 
     }
 
-    NaiveVector(const NaiveVector &other) :_num_elements(other._num_elements){
-        size_t alignment = 64;
-        //_data = new double[_num_elements];
-        _data  = static_cast<double*>(std::aligned_alloc(alignment, _num_elements * sizeof(double)));
+    Std_Aligned_Vector(const Std_Aligned_Vector &other) :_num_elements(other._num_elements){
+        _data.resize(_num_elements);
         for (size_t i = 0; i < _num_elements; ++i) {
             _data[i] = other._data[i];
         }
     }
 
-    ~NaiveVector() {
-        delete[] _data;
+    Std_Aligned_Vector(Std_Aligned_Vector &&other){
+        this->_num_elements = other._num_elements;
+        std::swap(_data, other._data);
     }
 
-    NaiveVector &operator=(const NaiveVector &other) {
-        size_t alignment = 64;
-        delete[] _data;
-        _num_elements = other._num_elements;
-        //_data = new double[_num_elements];
-        _data  = static_cast<double*>(std::aligned_alloc(alignment, _num_elements * sizeof(double)));
+    Std_Aligned_Vector &operator=(const Std_Aligned_Vector &other) {
+        _data.resize(_num_elements);
         for (size_t i = 0; i < _num_elements; ++i) {
             _data[i] = other._data[i];
         }
@@ -39,12 +37,13 @@ public:
     }
 
 
-    NaiveVector &operator=(NaiveVector &&other) noexcept {
+    Std_Aligned_Vector &operator=(Std_Aligned_Vector &&other) noexcept {
         this->_num_elements = other._num_elements;
         std::swap(_data, other._data);
         return *this;
     }
 
+    ~Std_Aligned_Vector() = default;
 
     double operator[](size_t index) const {
         return _data[index];
@@ -75,9 +74,7 @@ public:
     }
 public:
     size_t _num_elements{};
-    double * _data;
+    std::vector<double> _data;
 };
-
-
 
 #endif

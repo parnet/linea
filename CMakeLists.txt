@@ -126,7 +126,7 @@ add_executable(${PROJECT_NAME}
         code/cpu/mv.hpp
         code/operations_blas.hpp
         test/blas.h
-        code/Operations_OpenMP.hpp
+        code/operations_openmp.hpp
         code/util/modules.hpp
         code/libs/openmp.hpp
         code/libs/sycl.hpp
@@ -164,7 +164,7 @@ add_executable(${PROJECT_NAME}
         code/operations_cpu_nonconst.cpp
         code/operations_cpu_nonconst.hpp
         code/operations_mkl.hpp
-        code/Operations_OpenMP.cpp
+        code/operations_openmp.cpp
         code/operations_sse2.cpp
         code/operations_cpu.cpp
         benchmark/datastructures.hpp

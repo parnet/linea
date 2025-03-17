@@ -1,6 +1,6 @@
 
 #include "libs/openmp.hpp"
-#include "Operations_OpenMP.hpp"
+#include "operations_openmp.hpp"
 
 
 void Operations_OpenMP::matrix_vector_multiplikation(const Matrix & matrix_A, double alpha,  const Vector & vektor_x, double beta, Vector & vektor_y) {

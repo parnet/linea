@@ -1,6 +1,7 @@
 #ifndef OPERATIONS_SSE2_HPP
 #define OPERATIONS_SSE2_HPP
 
+#include "libs/intrinsics.hpp"
 
 #include "data/matrix.hpp"
 #include "data/vector.hpp"

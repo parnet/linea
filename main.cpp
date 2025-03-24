@@ -15,6 +15,8 @@
 #include "test/blas.h"
 #include "util/memory.hpp"
 
+
+
 int main()
 {
     //linea::openmp::info();
@@ -39,7 +41,6 @@ int main()
     memory::info(Giga);
     check_cuda_device();
     benchmark_mv();
-
 
 
     return 0;

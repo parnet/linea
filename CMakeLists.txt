@@ -133,7 +133,7 @@ add_executable(${PROJECT_NAME}
         code/cpu/mv.hpp
         code/operations_blas.hpp
         test/blas.h
-        code/Operations_OpenMP.hpp
+        code/operations_openmp.hpp
         code/util/modules.hpp
         code/libs/openmp.hpp
         code/libs/sycl.hpp
@@ -171,7 +171,7 @@ add_executable(${PROJECT_NAME}
         code/operations_cpu_nonconst.cpp
         code/operations_cpu_nonconst.hpp
         code/operations_mkl.hpp
-        code/Operations_OpenMP.cpp
+        code/operations_openmp.cpp
         code/operations_sse2.cpp
         code/operations_cpu.cpp
         benchmark/datastructures.hpp
@@ -181,6 +181,13 @@ add_executable(${PROJECT_NAME}
         code/cuda/matrix_vector_multiplikation.cu
         code/cuda/matrix_vector_multiplikation.cuh
         code/operations_cublas.hpp
+        code/operations_openmp_offload.cpp
+        code/operations_openmp_offload.hpp
+        code/compile_time/suffix.hpp
+        code/libs/openmp.cpp
+        code/data/gpu_matrix.hpp
+        code/operations_opencl.cpp
+        code/operations_opencl.hpp
 )
 
 
@@ -203,7 +210,21 @@ set_target_properties(${PROJECT_NAME} PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 #target_link_libraries(${PROJECT_NAME} PRIVATE ${LINK_LIBRARIES})
 #target_link_libraries(${PROJECT_NAME} PRIVATE ${HDF5_LIBRARIES})
 #target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_CXX)
-#target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenMP_LIBRARIES})
+message(${OpenMP_LIBRARIES})
+if(OpenMP_LIBRARIES)
+    #target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenMP_LIBRARIES})
+    #target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_CXX)
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenMP_LIBRARIES})
+endif ()
+if(OpenCL_LIBRARIES)
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenCL_LIBRARIES})
+endif ()
+if(Kokkos_LIBRARIES)
+    get_property(targets GLOBAL PROPERTY TARGETS)
+    message(STATUS "Available targets: ${targets}")
+
+    #target_link_libraries(${PROJECT_NAME} PRIVATE ${Kokkos_LIBRARIES})
+endif ()
 #target_link_libraries(${PROJECT_NAME} PRIVATE ${BLAS_LIBRARIES})
 
 

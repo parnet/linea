@@ -10,7 +10,6 @@ enable_language(CUDA)
 #check_language(CUDA)
 
 if (CMAKE_CUDA_COMPILER)
-    message(STATUS "CUDA Aktiverades" )
     set(CMAKE_CUDA_ARCHITECTURES "86") # for rtx3070Ti, 3090
     set(CMAKE_CUDA_STANDARD 17)
 #    enable_language(CUDA)
@@ -21,5 +20,8 @@ if (CMAKE_CUDA_COMPILER)
 #    set(CMAKE_CXX_COMPILER nvcc)
 
     #elseif ()
+    message(STATUS "[X]   CUDA version: ") # todo search for version
+else ()
+    message(STATUS "[ ]   CUDA was not found")
 endif ()
 #list(APPEND LINK_LIBRARIES ${CUDA_LIBRARIES})

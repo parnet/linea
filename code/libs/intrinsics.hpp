@@ -2,6 +2,7 @@
 #define LINEA_LIB_INTRINSICS_HPP
 
 #ifdef USE_INTRINSICS
+
 #if defined(__AVX512F__)
 #include <immintrin.h>  // AVX
 #define USE_AVX512 1

@@ -1,6 +1,7 @@
 #ifndef OPERATIONS_AVX512_HPP
 #define OPERATIONS_AVX512_HPP
 
+#include "libs/intrinsics.hpp"
 #ifdef USE_AVX512
 #include "data/crs_matrix.hpp"
 #include "data/matrix.hpp"

@@ -2,6 +2,7 @@
 #define BENCHMARK_MV_HPP
 
 #include <iostream>
+#include "compile_time/suffix.hpp"
 
 #include "operations_avx.hpp"
 #include "operations_avx512.hpp"
@@ -9,6 +10,7 @@
 #include "operations_cublas.hpp"
 #include "operations_cuda_kernel.hpp"
 #include "operations_mkl.hpp"
+#include "operations_opencl.hpp"
 #include "operations_sse2.hpp"
 #include "../code/operations_blas.hpp"
 #include "../code/util/timer.hpp"
@@ -30,7 +32,8 @@
 
 #include "../code/cpu/mv.hpp"
 
-#include "../code/Operations_OpenMP.hpp"
+#include "../code/operations_openmp.hpp"
+#include "../code/operations_openmp_offload.hpp"
 #include "../code/util/converter.hpp"
 
 /*
@@ -506,7 +509,7 @@ void _benchmark_mv(){
     for (int k = 3; k < 257; k+=8) {
 
         size_t gridsize = k;
-        if (convert(matrix_memory_size_laplacian_2d(gridsize),Giga) > 4.1) {
+        if (matrix_memory_size_laplacian_2d(gridsize) > 4.1_GiB) {
             break;
         }
         std::cout << "gridsize="<<k<<std::endl;
@@ -566,12 +569,21 @@ void benchmark_mv() {
 #endif
 
 #ifdef USE_OPENMP
-    _benchmark_mv<Operations_OpenMP>();
+//    _benchmark_mv<Operations_OpenMP>();
+    #if defined(USE_CUDA) || defined(USE_HIP)
+        //_benchmark_mv<Operations_OpenMP_Offload>();
+    #endif
 #endif
 #ifdef USE_CUDA
-    _benchmark_mv<Operations_CUDA_Kernel>();
-    _benchmark_mv<Operations_cuBLAS>();
+    //_benchmark_mv<Operations_CUDA_Kernel>();
+    //_benchmark_mv<Operations_cuBLAS>();
 #endif
+
+#ifdef USE_CUDA
+    _benchmark_mv<Operations_OpenCL>();
+    //_benchmark_mv<Operations_cuBLAS>();
+#endif
+
     //_benchmark_mv<Operations_BLAS>();
     //_benchmark_mv<Operations_MKL>();
 }

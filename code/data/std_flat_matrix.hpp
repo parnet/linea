@@ -41,6 +41,7 @@ public:
         for (size_t i = 0; i < _num_elements; ++i) {
             _data[i] = other._data[i];
         }
+        return *this;
     }
 
     Std_Flat_Matrix &operator=(Std_Flat_Matrix &&other) noexcept {

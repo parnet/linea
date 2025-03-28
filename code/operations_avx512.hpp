@@ -1,7 +1,8 @@
 #ifndef OPERATIONS_AVX512_HPP
 #define OPERATIONS_AVX512_HPP
 
-
+#include "libs/intrinsics.hpp"
+#ifdef USE_AVX512
 #include "data/crs_matrix.hpp"
 #include "data/matrix.hpp"
 #include "data/vector.hpp"
@@ -13,4 +14,5 @@ struct Operations_AVX512 {
 
     static void matrix_vector_multiplikation(const CRS_Matrix &matrix_A, double alpha, const Vector &vektor_x, double beta, Vector &vektor_y);
 };
+#endif
 #endif

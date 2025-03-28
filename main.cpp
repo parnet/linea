@@ -11,7 +11,11 @@
 
 #include "benchmark/mv.hpp"
 #include "code/operations_blas.hpp"
+#include "libs/cuda.hpp"
 #include "test/blas.h"
+#include "util/memory.hpp"
+
+
 
 int main()
 {
@@ -33,8 +37,11 @@ int main()
     //std::cin >> x;
     //gneral_matrix_test_blas();
     //benchmark_mv();
-    std::cout <<  2* (1 << 7) +1  << std::endl;
+    //std::cout <<  2* (1 << 7) +1  << std::endl;
+    memory::info(Giga);
+    check_cuda_device();
     benchmark_mv();
+
 
     return 0;
 }

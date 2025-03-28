@@ -1,6 +1,6 @@
 # ===================[ general CMake settings ]=========================================================================
-cmake_minimum_required(VERSION 3.15)
-set(PROJECT_NAME "Linea")
+cmake_minimum_required(VERSION 3.18)
+set(PROJECT_NAME "Linea" LANGUAGES CXX)
 
 project(${PROJECT_NAME})
 
@@ -11,6 +11,10 @@ endif ()
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED OFF)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 include_directories(code)
 
@@ -23,13 +27,15 @@ include_directories(code)
 
 set(OPT_LVL "3" CACHE STRING "Optimization level")
 
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -march=native -O${OPT_LVL} -Wall -Wextra -DNDEBUG -funroll-loops -ftree-vectorize")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -march=native -O${OPT_LVL} -Wall -Wextra -DNDEBUG -funroll-loops -ftree-vectorize")
+
+# not for nvcc :::  -march=native  -Wall  -Wextra -funroll-loops -funroll-loops -ftree-vectorize  -DNDEBUG
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O${OPT_LVL}   ")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O${OPT_LVL}    ")
 
 set(CMAKE_C_FLAGS_DEBUG "-g -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall -Wextra")
 
-set(CMAKE_CXX_FLAGS  ${CMAKE_CXX_FLAGS_RELEASE})
+#set(CMAKE_CXX_FLAGS  ${CMAKE_CXX_FLAGS_RELEASE})
 
 find_package(PkgConfig QUIET)
 # ===================[ Intrinsics ]=====================================================================================
@@ -70,25 +76,26 @@ set(ENABLE_OPENCL "OFF" CACHE STRING "OPENCL library usage")
 if (ENABLE_OPENCL)
     include(cmake/opencl.cmake)
 endif ()
+
 # ----------------------------------------------------------------------------------------------------------------------
-set(ENABLE_HDF5 "ON" CACHE STRING "HDF5 library usage")
-if (ENABLE_HDF5)
-    include(cmake/hdf5.cmake)
-endif ()
-# ----------------------------------------------------------------------------------------------------------------------
-set(ENABLE_BLAS "ON" CACHE STRING "BLAS library usage")
+set(ENABLE_BLAS "OFF" CACHE STRING "BLAS library usage")
 if (ENABLE_BLAS)
     include(cmake/blas.cmake)
 endif ()
 # ----------------------------------------------------------------------------------------------------------------------
-set(ENABLE_LAPACK "ON" CACHE STRING "LAPACK library usage")
+set(ENABLE_LAPACK "OFF" CACHE STRING "LAPACK library usage")
 if (ENABLE_LAPACK)
     include(cmake/lapack.cmake)
 endif ()
 # ----------------------------------------------------------------------------------------------------------------------
-set(ENABLE_MKL "ON" CACHE STRING "MKL library usage")
+set(ENABLE_MKL "OFF" CACHE STRING "MKL library usage")
 if (ENABLE_MKL)
     include(cmake/mkl.cmake)
+endif ()
+# ----------------------------------------------------------------------------------------------------------------------
+set(ENABLE_HDF5 "OFF" CACHE STRING "HDF5 library usage")
+if (ENABLE_HDF5)
+    include(cmake/hdf5.cmake)
 endif ()
 # ----------------------------------------------------------------------------------------------------------------------
 set(ENABLE_LUA "OFF" CACHE STRING "LUA library usage")
@@ -97,7 +104,7 @@ if (ENABLE_LUA)
 endif ()
 # ----------------------------------------------------------------------------------------------------------------------
 
-set(CMAKE_CXX_STANDARD 17)
+
 
 add_executable(${PROJECT_NAME}
         main.cpp
@@ -168,11 +175,32 @@ add_executable(${PROJECT_NAME}
         code/operations_sse2.cpp
         code/operations_cpu.cpp
         benchmark/datastructures.hpp
+        code/util/memory.hpp
+        code/util/memory.cpp
+        code/operations_cuda_kernel.hpp
+        code/cuda/matrix_vector_multiplikation.cu
+        code/cuda/matrix_vector_multiplikation.cuh
+        code/operations_cublas.hpp
+        code/operations_openmp_offload.cpp
+        code/operations_openmp_offload.hpp
+        code/compile_time/suffix.hpp
+        code/libs/openmp.cpp
+        code/data/gpu_matrix.hpp
+        code/operations_opencl.cpp
+        code/operations_opencl.hpp
 )
 
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "CXX flags: ${CMAKE_CXX_FLAGS}")
+
+
+find_package(CUDAToolkit REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE CUDA::cublas)
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
+target_link_libraries(${PROJECT_NAME} PRIVATE cudart)
+set_target_properties(${PROJECT_NAME} PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 
 #add_executable(${PROJECT_NAME} ${SOURCES} )
 #message(VERBOSE "Binary directory is: " ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
@@ -181,12 +209,24 @@ message(STATUS "CXX flags: ${CMAKE_CXX_FLAGS}")
 #message(STATUS "link-libraries: ${LINK_LIBRARIES}")
 #target_link_libraries(${PROJECT_NAME} PRIVATE ${LINK_LIBRARIES})
 #target_link_libraries(${PROJECT_NAME} PRIVATE ${HDF5_LIBRARIES})
-MESSAGE(STATUS "${OpenMP_LIBRARIES}")
 #target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_CXX)
-target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenMP_LIBRARIES})
-target_link_libraries(${PROJECT_NAME} PRIVATE ${BLAS_LIBRARIES})
+message(${OpenMP_LIBRARIES})
+if(OpenMP_LIBRARIES)
+    #target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenMP_LIBRARIES})
+    #target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_CXX)
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenMP_LIBRARIES})
+endif ()
+if(OpenCL_LIBRARIES)
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenCL_LIBRARIES})
+endif ()
+if(Kokkos_LIBRARIES)
+    get_property(targets GLOBAL PROPERTY TARGETS)
+    message(STATUS "Available targets: ${targets}")
+
+    #target_link_libraries(${PROJECT_NAME} PRIVATE ${Kokkos_LIBRARIES})
+endif ()
+#target_link_libraries(${PROJECT_NAME} PRIVATE ${BLAS_LIBRARIES})
 
 
 # ===================[ project properties  ]============================================================================
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+

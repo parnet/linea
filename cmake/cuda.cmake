@@ -1,4 +1,4 @@
-
+if (ENABLE_CUDA)
 # Enable CUDA
 
 #include(CheckLanguage)
@@ -24,4 +24,4 @@ if (CMAKE_CUDA_COMPILER)
 else ()
     message(STATUS "[ ]   CUDA was not found")
 endif ()
-#list(APPEND LINK_LIBRARIES ${CUDA_LIBRARIES})
+#list(APPEND LINK_LIBRARIES ${

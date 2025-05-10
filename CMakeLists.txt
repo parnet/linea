@@ -76,7 +76,11 @@ set(ENABLE_OPENCL "OFF" CACHE STRING "OPENCL library usage")
 if (ENABLE_OPENCL)
     include(cmake/opencl.cmake)
 endif ()
-
+# ----------------------------------------------------------------------------------------------------------------------
+set(ENABLE_EIGEN "OFF" CACHE STRING "EIGEN library usage")
+if (ENABLE_EIGEN)
+    include(cmake/eigen.cmake)
+endif ()
 # ----------------------------------------------------------------------------------------------------------------------
 set(ENABLE_BLAS "OFF" CACHE STRING "BLAS library usage")
 if (ENABLE_BLAS)
@@ -188,6 +192,12 @@ add_executable(${PROJECT_NAME}
         code/data/gpu_matrix.hpp
         code/operations_opencl.cpp
         code/operations_opencl.hpp
+        todo/integrate.hpp
+        todo/cuda.hpp
+        todo/opencl.hpp
+        todo/main.hpp
+        todo/polynom.hpp
+        todo/vector.hpp
 )
 
 
@@ -219,10 +229,15 @@ endif ()
 if(OpenCL_LIBRARIES)
     target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenCL_LIBRARIES})
 endif ()
+
+if(Eigen3_VERSION)
+    message(STATUS "Eigen3::Eigen")
+    target_link_libraries(${PROJECT_NAME} PRIVATE Eigen3::Eigen)
+endif ()
+
 if(Kokkos_LIBRARIES)
     get_property(targets GLOBAL PROPERTY TARGETS)
     message(STATUS "Available targets: ${targets}")
-
     #target_link_libraries(${PROJECT_NAME} PRIVATE ${Kokkos_LIBRARIES})
 endif ()
 #target_link_libraries(${PROJECT_NAME} PRIVATE ${BLAS_LIBRARIES})

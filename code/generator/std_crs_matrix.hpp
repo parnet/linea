@@ -7,9 +7,6 @@
 
 CRS_Matrix create_laplacian_2d(size_t gridsize){ // 5 for 3 inner nodes and two boundary nodes in one direction
 
-    const size_t num_elems_boundary = 2*gridsize + 2*(gridsize-2);
-    const size_t num_elems_inner = (gridsize-2)*(gridsize-2)*5;
-    const size_t num_elems = gridsize*gridsize;
 
     //std::cout << "===== [ Domain ] ===============" << std::endl;
     //std::cout << "Boundary: "<< num_elems_boundary
@@ -38,74 +35,91 @@ CRS_Matrix create_laplacian_2d(size_t gridsize){ // 5 for 3 inner nodes and two 
 
     // boundary full row + first following
     // std::cout << "Create upper boundary"<< std::endl;
-    size_t index = 0;
-    for(size_t index_col = 0; index_col < gridsize; ++index_col) {
+    row_ptr[0] = 0;
+    std::cout << 0 << " : " <<  0 <<  std::endl;
+
+    size_t number_of_values = 0;
+    size_t matrix_row;
+    for(matrix_row = 0; matrix_row < gridsize; ++matrix_row) {
+        std::cout << "processing row " << matrix_row << " bnd" << std::endl;
         data.push_back(1);
-        col_index.push_back(index_col);
-        //std::cout << index_col << ", " << index_col << ": " << 1<<std::endl;        ++index;
-        row_ptr[index] = index;
+        col_index.push_back(matrix_row);
+        ++number_of_values;
+
+        row_ptr[matrix_row+1] = number_of_values;
+        std::cout << matrix_row+1 << " : " <<  number_of_values <<  std::endl;
     }
+
 
     // std::cout << "Create boundary and inner"<< std::endl;
     for(size_t index_row = 1; index_row < gridsize - 1; ++index_row) {
-        // std::cout << "elem=" << index << std::endl;
+        std::cout << "processing row " << matrix_row  << " bnd" << std::endl;
+
+
         data.push_back(1);
-        col_index.push_back(index);
-        //std::cout << index << ", " << index << ": " << 1<<std::endl;
-        ++index;
-        row_ptr[index] = row_ptr[index-1]+1;
+        col_index.push_back(matrix_row);
+        ++number_of_values;
+
+        row_ptr[matrix_row+1] = number_of_values;
+        std::cout << matrix_row+1 << " : " <<  number_of_values <<  std::endl;
+        matrix_row++;
 
         for(size_t index_col = 1; index_col < gridsize-1; ++index_col) {
+            std::cout << "processing row " << matrix_row << " inner"<< std::endl;
+
 
             size_t other_index = (index_row-1) * gridsize + index_col;
+
             data.push_back(-1);
             col_index.push_back(other_index);
-            //std::cout << index << ", " << other_index << ": " << -1<<std::endl;
 
             data.push_back(-1);
-            col_index.push_back(index-1);
-            //std::cout << index << ", " << index-1 << ": " << -1<<std::endl;
+            col_index.push_back(matrix_row-1);
+
 
             data.push_back(4);
-            col_index.push_back(index);
-            //std::cout << index << ", " << index << ": " << 4<<std::endl;
+            col_index.push_back(matrix_row);
 
             data.push_back(-1);
-            col_index.push_back(index+1);
-            //std::cout << index << ", " << index+1 << ": " << -1<<std::endl;
+            col_index.push_back(matrix_row+1);
 
             other_index = (index_row+1) * gridsize + index_col;
             data.push_back(-1);
             col_index.push_back(other_index);
-            // std::cout << index << ", " << other_index << ": " << -1<<std::endl;
-            ++index;
-            row_ptr[index] = row_ptr[index-1]+5;
+            number_of_values += 5;
+
+
+            row_ptr[matrix_row+1] = number_of_values;
+            std::cout << matrix_row+1 << " : " <<  number_of_values <<  std::endl;
+            matrix_row++;
         }
+        std::cout << "processing row " << matrix_row << " bnd"<< std::endl;
 
         data.push_back(1);
-        col_index.push_back(index);
-        //std::cout << index << ", " << index << ": " << 1<<std::endl;
-        ++index;
-        row_ptr[index] = row_ptr[index-1]+1;
+        col_index.push_back(matrix_row);
+        ++number_of_values;
+
+
+        row_ptr[matrix_row+1] = number_of_values;
+        std::cout << matrix_row+1 << " : " <<  number_of_values <<  std::endl;
+        matrix_row++;
     }
-    //std::cout << "Create lower boundary"<< std::endl;
-    // boundary full row
+
     for(size_t index_col = 0; index_col < gridsize; ++index_col) {
+        std::cout << "processing row " << matrix_row << std::endl;
 
         data.push_back(1);
-        col_index.push_back(index);
-        //std::cout << index << ", " << index << ": " << 1<<std::endl;
-        ++index;
-        row_ptr[index] = row_ptr[index-1]+1;
+        col_index.push_back(matrix_row);
+
+        ++number_of_values;
+
+        row_ptr[matrix_row+1] = number_of_values;
+        std::cout << matrix_row+1 << " : " <<  number_of_values <<  std::endl;
+        matrix_row++;
     }
+    std::cout << "processing row finished" << std::endl;
+    auto matrix = CRS_Matrix(rows, cols, data, col_index, row_ptr);
 
-    matrix = CRS_Matrix(rows, cols, data, col_index, row_ptr);
-
-
-    //std::cout << std::endl;
-    //std::cout << std::endl;
-
-    //row_ptr[index] = row_ptr[index-1]+1;
 
     std::cout << "row_ptr" << std::endl;
     for (size_t i = 0; i < row_ptr.size(); i++) {
@@ -121,12 +135,6 @@ CRS_Matrix create_laplacian_2d(size_t gridsize){ // 5 for 3 inner nodes and two 
     for (size_t i = 0; i < data.size(); i++) {
         std::cout << data[i] << ", ";
     }
-    std::cout << std::endl;
-    std::cout << index << "\t" << row_ptr.size() <<  std::endl;
-
-
-    std::cout << std::endl;
-    std::cout << std::endl;
     return matrix;
 }
 #endif

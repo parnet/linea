@@ -9,7 +9,8 @@
 
 //#include "test/std_matrix.hpp"
 
-#include "benchmark/mv.hpp"
+#include "method/heat_equation.hpp"
+//#include "benchmark/mv.hpp"
 #include "code/operations_blas.hpp"
 #include "libs/cuda.hpp"
 #include "test/blas.h"
@@ -38,10 +39,10 @@ int main()
     //gneral_matrix_test_blas();
     //benchmark_mv();
     //std::cout <<  2* (1 << 7) +1  << std::endl;
-    memory::info(Giga);
-    check_cuda_device();
-    benchmark_mv();
-
+    //memory::info(Giga);
+    //check_cuda_device();
+    //benchmark_mv();
+    benchmark_heat_equation();
 
     return 0;
 }

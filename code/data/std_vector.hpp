@@ -11,14 +11,18 @@ class Std_Vector {
 public:
     Std_Vector() = default;
 
-    explicit Std_Vector(size_t num_elements) : _num_elements(num_elements) {
+    explicit Std_Vector(int num_elements) : _num_elements(num_elements) {
         _data.resize(num_elements);
+
+    }
+    explicit Std_Vector(const std::vector<double> &data) : _num_elements(data.size()) {
+        _data = data;
 
     }
 
     Std_Vector(const Std_Vector &other) :_num_elements(other._num_elements){
         _data.resize(_num_elements);
-        for (size_t i = 0; i < _num_elements; ++i) {
+        for (int i = 0; i < _num_elements; ++i) {
             _data[i] = other._data[i];
         }
     }
@@ -30,7 +34,7 @@ public:
 
     Std_Vector &operator=(const Std_Vector &other) {
         _data.resize(_num_elements);
-        for (size_t i = 0; i < _num_elements; ++i) {
+        for (int i = 0; i < _num_elements; ++i) {
             _data[i] = other._data[i];
         }
         return *this;
@@ -43,6 +47,12 @@ public:
         return *this;
     }
 
+    void swap(Std_Vector &other) noexcept {
+        std::swap(_num_elements, other._num_elements);
+        std::swap(_data, other._data);
+
+    }
+
     ~Std_Vector() = default;
 
     double operator[](size_t index) const {
@@ -53,7 +63,7 @@ public:
         return _data[index];
     }
 
-    size_t size() const {
+    int size() const {
         return _num_elements;
     }
 
@@ -73,7 +83,7 @@ public:
         return ss.str();
     }
 public:
-    size_t _num_elements;
+    int _num_elements;
     std::vector<double> _data;
 };
 

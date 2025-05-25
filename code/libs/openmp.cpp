@@ -4,7 +4,7 @@
 namespace linea::openmp {
     void info(){
 
-
+#ifdef USE_OPENMP
 #pragma omp parallel
         {
             int tid = omp_get_thread_num();
@@ -12,5 +12,7 @@ namespace linea::openmp {
 #pragma omp critical
             std::cout << "Thread " << tid << " av " << total << std::endl;
         }
+#endif
+
+        }
     }
-}

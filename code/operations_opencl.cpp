@@ -1,4 +1,5 @@
 
+#ifdef USE_OPENCL
 
 #include "operations_opencl.hpp"
 
@@ -130,3 +131,4 @@ void Operations_OpenCL::matrix_vector_multiplikation(const Matrix & matrix_A, do
     queue.enqueueReadBuffer(bufferY, CL_TRUE, 0, sizeof(double) * M, vektor_y._data.data());
 
 }
+#endif

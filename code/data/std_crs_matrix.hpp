@@ -17,9 +17,9 @@ public:
     // todo move operator
     // todo destructor
 
-    Std_CRS_Matrix(size_t num_rows, size_t num_cols, std::vector<double> data,
-                 std::vector<size_t> col_index,
-                 std::vector<size_t> row_ptr) : _num_rows(num_rows),
+    Std_CRS_Matrix(int num_rows, int num_cols, std::vector<double> data,
+                 std::vector<int> col_index,
+                 std::vector<int> row_ptr) : _num_rows(num_rows),
                                                 _num_cols(num_cols),
                                                 _data(std::move(data)),
                                                 _col_index(std::move(col_index)),
@@ -30,19 +30,19 @@ public:
         size_t total = 0;
         total += sizeof(size_t)*2;
         total += _data.size() * sizeof(double);
-        total += _col_index.size() * sizeof(size_t);
-        total += _row_ptr.size() * sizeof(size_t);
+        total += _col_index.size() * sizeof(int);
+        total += _row_ptr.size() * sizeof(int);
         return total;
     }
 
 
     std::string str() {
         std::stringstream ss;
-        for(size_t i = 0 ; i < _num_rows; ++i) {
-            size_t lower = _row_ptr[i];
-            size_t upper = _row_ptr[i+1];
+        for(int i = 0 ; i < _num_rows; ++i) {
+            int lower = _row_ptr[i];
+            int upper = _row_ptr[i+1];
             ss << i << "\t lower="<<lower << ", upper=" << upper << std::endl;
-            for( size_t j = lower; j < upper; ++j) {
+            for( int j = lower; j < upper; ++j) {
                 ss  << i << "\t "<<","<<this->_col_index[j] << ": " << this->_data[j] << ", " << std::endl;
             }
         }
@@ -50,11 +50,11 @@ public:
     }
 
 public:
-    size_t _num_rows;
-    size_t _num_cols;
+    int _num_rows;
+    int _num_cols;
     std::vector<double> _data;
-    std::vector<size_t> _col_index;
-    std::vector<size_t> _row_ptr;
+    std::vector<int> _col_index;
+    std::vector<int> _row_ptr;
 };
 
 #endif

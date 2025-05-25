@@ -52,6 +52,7 @@ if (ENABLE_OPENMP)
     include(cmake/openmp.cmake)
 endif ()
 # ----------------------------------------------------------------------------------------------------------------------
+
 set(ENABLE_CUDA "OFF" CACHE STRING "CUDA library usage")
 if (ENABLE_CUDA)
     include(cmake/cuda.cmake)
@@ -198,6 +199,20 @@ add_executable(${PROJECT_NAME}
         todo/main.hpp
         todo/polynom.hpp
         todo/vector.hpp
+        method/heat_equation.hpp
+        code/generator/extract_diag.hpp
+        method/compute_residual_crs.cu
+        method/compute_residual_crs.cuh
+        method/cuda_datastructures.hpp
+        method/cuda_bridge.hpp
+        method/compute_residual_crs.hpp
+        method/jacobi_method.cu
+        method/vector_inverse.cu
+        method/norm.cu
+        method/norm.cuh
+        method/norm.hpp
+        method/jacobi_method.hpp
+        method/jacobi_method.cuh
 )
 
 
@@ -220,10 +235,11 @@ set_target_properties(${PROJECT_NAME} PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 #target_link_libraries(${PROJECT_NAME} PRIVATE ${LINK_LIBRARIES})
 #target_link_libraries(${PROJECT_NAME} PRIVATE ${HDF5_LIBRARIES})
 #target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_CXX)
-message(${OpenMP_LIBRARIES})
+message(STATUS ${OpenMP_LIBRARIES})
 if(OpenMP_LIBRARIES)
     #target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenMP_LIBRARIES})
     #target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_CXX)
+    message(STATUS "linking openmp")
     target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenMP_LIBRARIES})
 endif ()
 if(OpenCL_LIBRARIES)

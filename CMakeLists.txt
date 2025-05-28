@@ -220,7 +220,7 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "CXX flags: ${CMAKE_CXX_FLAGS}")
 
 
-find_package(CUDAToolkit REQUIRED)
+# find_package(CUDAToolkit REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE CUDA::cublas)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})

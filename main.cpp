@@ -9,7 +9,7 @@
 
 //#include "test/std_matrix.hpp"
 
-#include "method/heat_equation.hpp"
+#include "problem/heat_equation.hpp"
 //#include "benchmark/mv.hpp"
 #include "code/operations_blas.hpp"
 #include "libs/cuda.hpp"

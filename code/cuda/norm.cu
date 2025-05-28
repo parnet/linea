@@ -6,17 +6,14 @@
 __global__ void cu_sum_of_squares_kernel(const double* x, double* block_sums, int N) {
     extern __shared__ double sdata[];
 
-
-
     int tid = threadIdx.x;
     int i = blockIdx.x * blockDim.x + tid;
 
-    // Ladda in element eller 0 om utanför
     double val = (i < N) ? x[i] * x[i] : 0.0;
     sdata[tid] = val;
     __syncthreads();
 
-    // Parallell reduktion i delad minne
+    // Parallell reduction in shared memory
 #pragma unroll
     for (unsigned int s = blockDim.x / 2; s > 0; s >>= 1) {
         if (tid < s) {
@@ -25,7 +22,7 @@ __global__ void cu_sum_of_squares_kernel(const double* x, double* block_sums, in
         __syncthreads();
     }
 
-    // Skriv ut blockets summa i globalt minne
+    // write to global memory
     if (tid == 0) {
         block_sums[blockIdx.x] = sdata[0];
     }
@@ -35,9 +32,7 @@ void cu_sum_of_squares_launcher(const double* x, double* block_sums, int N, cuda
     int threadsPerBlock = 256;
     int blocksPerGrid = (N + threadsPerBlock - 1) / threadsPerBlock;
     size_t sharedMemSize = threadsPerBlock * sizeof(double);
-    //std::cout << blocksPerGrid << std::endl;
-    //std::cout << threadsPerBlock << std::endl;
-    //std::cout << sharedMemSize << std::endl;
+
 
     double* d_block_sums;
     cudaMalloc(&d_block_sums, blocksPerGrid * sizeof(double));

@@ -9,11 +9,12 @@ inline bool module_avail_blas() {
     return false;
 }
 
-inline bool module_avail_cuda() {
+inline constexpr bool module_avail_cuda() {
 #ifdef USE_CUDA
     return true;
-#endif
+#else
     return false;
+#endif
 }
 
 inline bool module_avail_hip() {
@@ -89,7 +90,6 @@ inline bool module_avail_sycl() {
 #endif
     return false;
 }
-
 
 inline bool module_avail_opencl() {
 #ifdef USE_OPENCL

@@ -5,14 +5,17 @@
 #include "data/vector.hpp"
 
 
-struct  Operations_CUDA_Kernel {
+struct  Operations_CUDA {
     static constexpr const char * name ="CUDA_Kernel";
+
     static void matrix_vector_multiplikation(const Matrix &matrix_A, double alpha, const Vector &vektor_x, double beta, Vector &vektor_y);
+
+    static void norm();
 };
 
 
-inline void Operations_CUDA_Kernel::matrix_vector_multiplikation(const Matrix &matrix_A, double alpha, const Vector &vektor_x, double beta, Vector &vektor_y) {
 
+inline void Operations_CUDA::matrix_vector_multiplikation(const Matrix &matrix_A, double alpha, const Vector &vektor_x, double beta, Vector &vektor_y) {
     cu_matrix_vektor_multiplication(
         matrix_A._num_cols,
         matrix_A._num_rows,

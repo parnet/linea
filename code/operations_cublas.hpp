@@ -12,7 +12,6 @@ struct  Operations_cuBLAS {
 };
 
 inline void Operations_cuBLAS::matrix_vector_multiplikation(const Matrix &matrix_A, double alpha, const Vector &vektor_x, double beta, Vector &vektor_y) {
-
     cublasHandle_t handle;
     cublasCreate(&handle);
     cublasDgemv_v2_64(handle, CUBLAS_OP_N,

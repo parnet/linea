@@ -5,20 +5,15 @@
 #include <util/timer.hpp>
 #include <omp.h>
 
-#include "compute_residual_crs.hpp"
+#include "cuda/compute_residual_crs.hpp"
 #include "generator/extract_diag.hpp"
 #include "generator/std_crs_matrix.hpp"
 #include "generator/std_vector.hpp"
-#include "cuda_datastructures.hpp"
-#include "jacobi_method.hpp"
-#include "norm.hpp"
+#include "cuda/cuda_datastructures.hpp"
+#include "cuda/jacobi_method.hpp"
+#include "cuda/norm.hpp"
+#include "util/converter.hpp"
 
-
-//create_matrix()
-//create_identity_matrix()
-//transfer_matrix()
-//source_function()
-//solve_timestep()
 
 
 inline void vec_print(const char * name, Vector & vec, int Nx,int  Ny) {
@@ -33,6 +28,8 @@ inline void vec_print(const char * name, Vector & vec, int Nx,int  Ny) {
 }
 
 inline void cuda_heat_equation(int Nx, int Ny, double t0, double tn, int Nt) {
+    Timer walltime;
+    walltime.start();
     std::cout << "heat_equation" <<std::endl;
     std::cout << "Nx="<< Nx << " Ny=" << Ny << " t0="<<t0<< " tn="<< tn <<" Nt="<<Nt << std::endl;
     double alpha = 1.0;
@@ -55,9 +52,12 @@ inline void cuda_heat_equation(int Nx, int Ny, double t0, double tn, int Nt) {
     std::cout << std::endl;*/
 
 
-
+    Timer transfer_timer = Timer();
+    transfer_timer.stop();
     auto cu_laplace_matrix = CUDA_CRS_Matrix(laplace_matrix);
-
+    cudaStreamSynchronize(cu_laplace_matrix.stream);
+    transfer_timer.stop();
+    std::cout << "transfer_time= " << transfer_timer.get() << " [s]" << std::endl;
     Vector laplace_diag = Vector(laplace_matrix._num_rows);
     extract_diagonal(laplace_diag, laplace_matrix, 0.66);
 
@@ -130,8 +130,14 @@ inline void cuda_heat_equation(int Nx, int Ny, double t0, double tn, int Nt) {
         //Vector x0 = cu_x0.get_vector();
     }
     timer.stop();
+    walltime.stop();
     std::cout << "time=" << timer.get() <<" [s]"<< std::endl;
-    //std::cout << std::endl;
+    std::cout << "walltime=" << walltime.get() <<" [s]"<< std::endl;
+
+    std::cout << "A=" << convert(laplace_matrix.memory_size(),Mega) <<" ["<<symbol(Mega)<<"]"<< std::endl;
+    std::cout << "D=" << convert(laplace_diag.memory_size(),Mega) <<" ["<<symbol(Mega)<<"]"<< std::endl;
+    std::cout << "x0=" << convert(x0.memory_size(),Mega) <<" ["<<symbol(Mega)<<"]"<< std::endl;
+    std::cout << "rhs=" << convert(rhs.memory_size(),Mega) <<" ["<<symbol(Mega)<<"]"<< std::endl;
     std::cout << normer[max_iteration-1] << std::endl;
 }
 
@@ -172,6 +178,9 @@ inline void jacobi_step(Vector &x_new,  Vector &x0, Vector &omegaDinv, Vector &d
 }
 
 inline void cpu_heat_equation(int Nx, int Ny, double t0, double tn, int Nt) {
+    Timer walltime = Timer();
+    walltime.start();
+
     std::cout << "heat_equation" <<std::endl;
     std::cout << "Nx="<< Nx << " Ny=" << Ny << " t0="<<t0<< " tn="<< tn <<" Nt="<<Nt << std::endl;
     double alpha = 1.0;
@@ -266,7 +275,7 @@ inline void cpu_heat_equation(int Nx, int Ny, double t0, double tn, int Nt) {
         }
         std::cout << std::endl;*/
         norm = sum_of_squares(defect);
-        std::cout <<"norm="<< norm  << ",";
+        //std::cout <<"norm="<< norm  << ",";
         normer[k] =  norm;
 
         jacobi_step(x_current, x0, laplace_diag,defect);
@@ -279,13 +288,22 @@ inline void cpu_heat_equation(int Nx, int Ny, double t0, double tn, int Nt) {
     std::cout << "time=" << timer.get() <<" [s]"<< std::endl;
     //std::cout << std::endl;
     std::cout << normer[max_iteration-1] << std::endl;
+    walltime.stop();
+    std::cout << "walltime=" << walltime.get() <<" [s]"<< std::endl;
 }
 
 
 inline  void benchmark_heat_equation() {
     //omp_set_num_threads(8);
     //heat_equation(5, 5, 0, 2.0, 512);
-    //cuda_heat_equation(2048, 2048, 0, 2.0, 512);
+
+    cuda_heat_equation(1, 1, 0, 2.0, 512);
+
+    cuda_heat_equation(1024, 1024, 0, 2.0, 512);
+    cuda_heat_equation(1448, 1448, 0, 2.0, 512);
     cuda_heat_equation(2048, 2048, 0, 2.0, 512);
+    cuda_heat_equation(2896, 2896, 0, 2.0, 512);
+
+    //cuda_heat_equation(2048, 2048, 0, 2.0, 512);
 }
 #endif

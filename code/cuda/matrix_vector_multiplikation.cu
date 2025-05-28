@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cuda_runtime.h>
-#include "operations_cuda_kernel.hpp"
+#include "operations_cuda.hpp"
 
 
 // CUDA-kernel för matris-vektor-multiplikation

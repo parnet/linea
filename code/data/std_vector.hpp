@@ -69,7 +69,7 @@ public:
 
     size_t memory_size() {
         size_t total = 0;
-        total += sizeof(size_t)*1;
+        total += sizeof(int)*1;
         total += sizeof(double)*_num_elements;
         return total;
     }

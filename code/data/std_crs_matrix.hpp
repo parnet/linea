@@ -28,7 +28,7 @@ public:
 
     size_t memory_size() {
         size_t total = 0;
-        total += sizeof(size_t)*2;
+        total += sizeof(int)*2;
         total += _data.size() * sizeof(double);
         total += _col_index.size() * sizeof(int);
         total += _row_ptr.size() * sizeof(int);

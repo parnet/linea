@@ -21,46 +21,44 @@ __global__ void cu_vector_inverse_kernel(int N, double* D) {
 }
 
 __global__ void cu_jacobi_step_kernel(
-    int N,
-    const double* __restrict__ d,
-    const double* __restrict__ D,
-    const double* __restrict__ x_old,
     double* __restrict__ x_new,
+    const double* __restrict__ x_old,
+    const double* __restrict__ defect,
+    const double* __restrict__ diagonal_A,
     double omega,
-    cudaStream_t stream = nullptr)
+    int N)
 {
     unsigned int row = blockIdx.x * blockDim.x + threadIdx.x;
     if (row >= N) return;
 
-    x_new[row] = x_old[row] + omega * (d[row] / D[row]);
+    x_new[row] = x_old[row] + omega * (defect[row] / diagonal_A[row]);
 }
 
 __global__ void cu_jacobi_step_kernel(
     double* __restrict__ x_new,
-    int N,
     const double* __restrict__ x_old,
     const double* __restrict__ omega_D_inv,// omega * D^{-1} precomputed
-    const double* __restrict__ defect
-    )
+    const double* __restrict__ defect,
+    int N)
 {
     unsigned int row = blockIdx.x * blockDim.x + threadIdx.x;
     if (row >= N) return;
 
-    x_new[row] = x_old[row] + (defect[row] * omega_D_inv[row]);
+    x_new[row] = x_old[row] + (omega_D_inv[row]*defect[row]);
 }
 
 void cu_jacobi_step_launch(
     double* x_new,
-    int num_rows,
     const double* x_old,
     const double* omega_D_inv,
     const double* defect,
+    int num_rows,
     cudaStream_t stream = nullptr  // default: stream 0 (default stream)
 ) {
     constexpr int blockSize = 256;
     const int gridSize = (num_rows + blockSize - 1) / blockSize;
 
-    cu_jacobi_step_kernel<<<gridSize, blockSize, 0, stream>>>(x_new, num_rows, x_old, omega_D_inv, defect);
+    cu_jacobi_step_kernel<<<gridSize, blockSize, 0, stream>>>(x_new, x_old, omega_D_inv, defect, num_rows);
 }
 
 

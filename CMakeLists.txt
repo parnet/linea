@@ -126,7 +126,6 @@ add_executable(${PROJECT_NAME}
         code/generator/std_matrix.hpp
         code/generator/naive_matrix.hpp
         test/std_matrix.hpp
-        benchmark/csrmv.hpp
         code/util/converter.hpp
         code/util/measurement.hpp
         code/generator/std_vector.hpp
@@ -179,10 +178,9 @@ add_executable(${PROJECT_NAME}
         code/operations_openmp.cpp
         code/operations_sse2.cpp
         code/operations_cpu.cpp
-        benchmark/datastructures.hpp
         code/util/memory.hpp
         code/util/memory.cpp
-        code/operations_cuda_kernel.hpp
+        code/operations_cuda.hpp
         code/cuda/matrix_vector_multiplikation.cu
         code/cuda/matrix_vector_multiplikation.cuh
         code/operations_cublas.hpp
@@ -194,25 +192,24 @@ add_executable(${PROJECT_NAME}
         code/operations_opencl.cpp
         code/operations_opencl.hpp
         todo/integrate.hpp
-        todo/cuda.hpp
-        todo/opencl.hpp
         todo/main.hpp
         todo/polynom.hpp
         todo/vector.hpp
-        method/heat_equation.hpp
+        problem/heat_equation.hpp
         code/generator/extract_diag.hpp
-        method/compute_residual_crs.cu
-        method/compute_residual_crs.cuh
-        method/cuda_datastructures.hpp
-        method/cuda_bridge.hpp
-        method/compute_residual_crs.hpp
-        method/jacobi_method.cu
-        method/vector_inverse.cu
-        method/norm.cu
-        method/norm.cuh
-        method/norm.hpp
-        method/jacobi_method.hpp
-        method/jacobi_method.cuh
+        code/cuda/compute_residual_crs.cu
+        code/cuda/compute_residual_crs.cuh
+        code/cuda/cuda_datastructures.hpp
+        code/cuda/cuda_bridge.hpp
+        code/cuda/compute_residual_crs.hpp
+        code/cuda/jacobi_method.cu
+        code/cuda/vector_inverse.cu
+        code/cuda/norm.cu
+        code/cuda/norm.cuh
+        code/cuda/norm.hpp
+        code/cuda/jacobi_method.hpp
+        code/cuda/jacobi_method.cuh
+        code/compile_time/complexity.hpp
 )
 
 
@@ -221,7 +218,9 @@ message(STATUS "CXX flags: ${CMAKE_CXX_FLAGS}")
 
 
 # find_package(CUDAToolkit REQUIRED)
+if (ENABLE_CUDA)
 target_link_libraries(${PROJECT_NAME} PRIVATE CUDA::cublas)
+endif ()
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
 target_link_libraries(${PROJECT_NAME} PRIVATE cudart)

@@ -56,20 +56,19 @@ void cu_jacobi_prepare_diag_launch(int N, double* D, float omega) ;
 void cu_vector_inverse_launch(int N, double* D);
 
 void cu_jacobi_step_launch(
-double*  x_new,
-    int N,
-    const double*  d,
-    const double*  D,
+    double*  x_new,
     const double*  x_old,
-
-    double omega);
+    double omega,
+    const double*  D,
+    const double*  d,
+    int N);
 
 void cu_jacobi_step_launch(
     double*  x_new,
-    int num_rows,
-    const double*  d,
-    const double*  omega_D_inv, // omega * D^{-1} precomputed
     const double*  x_old,
+    const double*  omega_D_inv, // omega * D^{-1} precomputed
+    const double*  d,
+    int num_rows,
     cudaStream_t stream
     );
 

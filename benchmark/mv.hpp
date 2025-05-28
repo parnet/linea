@@ -8,7 +8,7 @@
 #include "operations_avx512.hpp"
 #include "operations_cpu.hpp"
 #include "operations_cublas.hpp"
-#include "operations_cuda_kernel.hpp"
+#include "operations_cuda.hpp"
 #include "operations_mkl.hpp"
 #include "operations_opencl.hpp"
 #include "operations_sse2.hpp"

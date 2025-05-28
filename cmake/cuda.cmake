@@ -24,4 +24,5 @@ if (CMAKE_CUDA_COMPILER)
 else ()
     message(STATUS "[ ]   CUDA was not found")
 endif ()
-#list(APPEND LINK_LIBRARIES ${
+#list(APPEND LINK_LIBRARIES
+endif ()

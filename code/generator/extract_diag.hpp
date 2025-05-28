@@ -1,5 +1,6 @@
 #ifndef EXTRACT_DIAG_HPP
 #define EXTRACT_DIAG_HPP
+
 #include <iostream>
 
 #include "data/crs_matrix.hpp"
@@ -13,7 +14,8 @@ void crs_to_dense(
 
     int num_rows,
     int num_cols
-) {
+)
+{
     // Initiera med nollor
     dense_matrix.assign(num_rows, std::vector<double>(num_cols, 0.0));
 
@@ -41,22 +43,13 @@ inline void extract_diagonal(Vector & vec, const CRS_Matrix & matrix,double omeg
         for (int col_idx = row_start; col_idx < row_end; col_idx++) {
             int col = matrix._col_index[col_idx];
             if (col == row) {
-                //std::cout << col << " ! ";
-                //std::cout << matrix._data[col_idx] << std::endl;
                 vec._data[row] = omega/matrix._data[col_idx];
                 diagonal = true;
-            } //else {
-            //    std::cout << col << ", ";
-            //}
+            }
         }
-        //if (!diagonal) {
-        //    std::cout << "error - no diagonal element" << std::endl;
-        //}
-        //if (vec._data[row] < 0.01) {
-        //    std::cout << "error - diagonal för liten" << std::endl;
-        //}
-        //std::cout << std::endl;
-        //std::cout << "vec:" << vec._data[row] << std::endl;
+        if (!diagonal) {
+            std::cout << "error - no diagonal element" << std::endl;
+        }
     }
 
 }

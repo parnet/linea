@@ -1,6 +1,4 @@
-#ifndef DATA_C_ALIGNED_VECTOR_HPP
-#define DATA_C_ALIGNED_VECTOR_HPP
-
+#pragma once
 #include <cstdlib>
 
 
@@ -88,4 +86,3 @@ public:
     size_t _num_elements{};
     double * _data;
 };
-#endif

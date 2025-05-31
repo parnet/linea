@@ -1,6 +1,4 @@
-#ifndef DATA_STD_MATRIX_HPP
-#define DATA_STD_MATRIX_HPP
-
+#pragma once
 #include <vector>
 #include <sstream>
 
@@ -36,7 +34,7 @@ public:
         this->_num_cols = other._num_cols;
 
         //this->_data = std::move(other._data);
-        //other._data = std::vector<std::vector<double>>();
+        //other._data = std::linear_algebra<std::linear_algebra<double>>();
         std::swap(this->_data,other._data);
     }
 
@@ -61,7 +59,7 @@ public:
         this->_num_rows = other._num_rows;
         this->_num_cols = other._num_cols;
         //this->_data = std::move(other._data);
-        //other._data = std::vector<std::vector<double>>();
+        //other._data = std::linear_algebra<std::linear_algebra<double>>();
         std::swap(this->_data,other._data);
         return *this;
     }
@@ -88,7 +86,7 @@ public:
     size_t memory_size() {
         size_t total = 0;
         total += sizeof(size_t)*3;
-        total += sizeof(double)*_num_elements; // todo plus costs for std::vector?
+        total += sizeof(double)*_num_elements; // todo plus costs for std::linear_algebra?
         return total;
     }
 
@@ -110,4 +108,3 @@ public:
 };
 
 
-#endif

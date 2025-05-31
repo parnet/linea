@@ -109,7 +109,9 @@ if (ENABLE_LUA)
 endif ()
 # ----------------------------------------------------------------------------------------------------------------------
 
-
+include_directories(${CUDA_INCLUDE_DIRS})
+include_directories(${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
+include_directories(${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME}
         main.cpp
@@ -125,7 +127,6 @@ add_executable(${PROJECT_NAME}
         code/data/std_matrix.hpp
         code/generator/std_matrix.hpp
         code/generator/naive_matrix.hpp
-        test/std_matrix.hpp
         code/util/converter.hpp
         code/util/measurement.hpp
         code/generator/std_vector.hpp
@@ -135,9 +136,7 @@ add_executable(${PROJECT_NAME}
         code/generator/std_crs_matrix.hpp
         benchmark/mv.hpp
         code/cpu/mv.hpp
-        code/operations_blas.hpp
-        test/blas.h
-        code/operations_openmp.hpp
+
         code/util/modules.hpp
         code/libs/openmp.hpp
         code/libs/sycl.hpp
@@ -155,15 +154,7 @@ add_executable(${PROJECT_NAME}
         code/libs/blas.hpp
         code/libs/intrinsics.hpp
         code/libs/__lib_blas.h
-        code/simd/csrmv.h
-        code/operations_cpu.hpp
-        code/operations_sse2.hpp
-        code/operations_avx.hpp
-        code/operations_avx512.hpp
-        code/operations_avx512.cpp
-        code/operations_avx.cpp
-        code/operations_nonopt.hpp
-        code/operations_nonopt.cpp
+        code/simd/csr_mv.h
         code/data/c_aligned_matrix.hpp
         code/data/std_flat_matrix.hpp
         code/util/aligned_allocator.hpp
@@ -172,45 +163,84 @@ add_executable(${PROJECT_NAME}
         code/data/std_vector.hpp
         code/data/std_aligned_vector.hpp
         code/data/std_aligned_matrix.hpp
-        code/operations_cpu_nonconst.cpp
-        code/operations_cpu_nonconst.hpp
-        code/operations_mkl.hpp
-        code/operations_openmp.cpp
-        code/operations_sse2.cpp
-        code/operations_cpu.cpp
         code/util/memory.hpp
         code/util/memory.cpp
-        code/operations_cuda.hpp
-        code/cuda/matrix_vector_multiplikation.cu
-        code/cuda/matrix_vector_multiplikation.cuh
-        code/operations_cublas.hpp
-        code/operations_openmp_offload.cpp
-        code/operations_openmp_offload.hpp
         code/compile_time/suffix.hpp
         code/libs/openmp.cpp
         code/data/gpu_matrix.hpp
-        code/operations_opencl.cpp
-        code/operations_opencl.hpp
         todo/integrate.hpp
         todo/main.hpp
         todo/polynom.hpp
         todo/vector.hpp
         problem/heat_equation.hpp
         code/generator/extract_diag.hpp
-        code/cuda/compute_residual_crs.cu
-        code/cuda/compute_residual_crs.cuh
-        code/cuda/cuda_datastructures.hpp
-        code/cuda/cuda_bridge.hpp
-        code/cuda/compute_residual_crs.hpp
-        code/cuda/jacobi_method.cu
-        code/cuda/vector_inverse.cu
-        code/cuda/norm.cu
-        code/cuda/norm.cuh
-        code/cuda/norm.hpp
-        code/cuda/jacobi_method.hpp
-        code/cuda/jacobi_method.cuh
+        code/cuda/cusparse/bicgstab.cu
+        code/cuda/cusparse/bicgstab.cuh
         code/compile_time/complexity.hpp
+
+        code/blas/blas.hpp
+        code/openmp/openmp.hpp
+        code/cpu/cpu_nonconst.cpp
+        code/cpu/cpu_nonconst.hpp
+        code/mkl/mkl.hpp
+        code/openmp/openmp.cpp
+        code/simd/sse2.cpp
+        code/cpu/cpu.cpp
+        code/cuda/cuda.hpp
+        code/cuda/cublas.hpp
+        code/offloading/openmp_offload.cpp
+        code/offloading/openmp_offload.hpp
+        code/opencl/opencl.cpp
+        code/opencl/opencl.hpp
+        code/cpu/cpu.hpp
+        code/simd/sse2.hpp
+        code/simd/avx.hpp
+        code/simd/avx512.hpp
+        code/simd/avx512.cpp
+        code/simd/avx.cpp
+        code/cpu/nonopt.hpp
+        code/cpu/nonopt.cpp
+        code/cuda/cusparse/bicgstab.cuh
+        code/cpu/linear_algebra/vector.hpp
+        code/cpu/linear_algebra/matrix.hpp
+        code/cpu/linear_algebra/crs_matrix.hpp
+        code/cuda/linear_algebra/crs_matrix.hpp
+        code/cuda/linear_algebra/matrix.hpp
+        code/cuda/linear_algebra/vector.hpp
+        code/cpu/definitions.hpp
+        code/cuda/data/vector.hpp
+        code/cuda/data/crs_matrix.hpp
+        code/cuda/linear_algebra/block_crs_matrix.hpp
+        code/cuda/linear_algebra/kernel/sum_of_squares.cuh
+        code/cuda/linear_algebra/kernel/sum_of_squares.cu
+        code/cuda/linear_algebra/kernel/crs_residual.cu
+        code/cuda/linear_algebra/kernel/crs_residual.cuh
+        code/cuda/linear_algebra/kernel/vector_div_scalar.cu
+        code/cuda/linear_algebra/kernel/vector_div_scalar.cuh
+        code/cuda/linear_algebra/kernel/matrix_vector_multiplication.cu
+        code/cuda/linear_algebra/kernel/matrix_vector_multiplication.cuh
+        code/cuda/linear_algebra/kernel/block_matrix_vector_multitplication.cu
+        code/cuda/linear_algebra/kernel/block_matrix_vector_multitplication.cuh
+        code/cuda/linear_algebra/vector.cpp
+        code/cuda/linear_algebra/kernel/jacobi_step.cu
+        code/cuda/linear_algebra/kernel/jacobi_step.cuh
+        code/cuda/data/matrix.hpp
+        code/cuda/data/block_vector.hpp
+        code/cuda/data/block_crs_matrix.hpp
+        code/cuda/data/block_matrix.hpp
+        code/data/block_vector.hpp
+        code/data/block_matrix.hpp
+        code/data/block_crs_matrix.hpp
+        code/cuda/linear_algebra/block_vector.hpp
+        code/cuda/linear_algebra/block_matrix.hpp
+        code/cpu/linear_algebra/block_crs_matrix.hpp
+        code/cpu/linear_algebra/block_vector.hpp
+        code/cpu/linear_algebra/block_matrix.hpp
+
 )
+
+find_package(CUDAToolkit REQUIRED)
+
 
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
@@ -226,6 +256,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CUDA_TOOLKIT_INCLUDE_
 target_link_libraries(${PROJECT_NAME} PRIVATE cudart)
 set_target_properties(${PROJECT_NAME} PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 
+target_link_libraries(${PROJECT_NAME} PRIVATE CUDA::cublas CUDA::cusparse CUDA::cudart)
 #add_executable(${PROJECT_NAME} ${SOURCES} )
 #message(VERBOSE "Binary directory is: " ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 #set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
@@ -253,7 +284,6 @@ endif ()
 if(Kokkos_LIBRARIES)
     get_property(targets GLOBAL PROPERTY TARGETS)
     message(STATUS "Available targets: ${targets}")
-    #target_link_libraries(${PROJECT_NAME} PRIVATE ${Kokkos_LIBRARIES})
 endif ()
 #target_link_libraries(${PROJECT_NAME} PRIVATE ${BLAS_LIBRARIES})
 

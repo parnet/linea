@@ -1,5 +1,4 @@
-#ifndef UTIL_VERSION_HPP
-#define UTIL_VERSION_HPP
+#pragma once
 
 #include <cstdint>
 #include <sstream>
@@ -31,5 +30,3 @@ private:
     uint8_t _minnum = 0;
     uint8_t _relnum = 0;
 };
-
-#endif

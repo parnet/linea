@@ -309,7 +309,7 @@ int main(int argc, char *argv[]) {
 
     hipMemcpy(h_y.data(), d_y, h_y.size() * sizeof(float), hipMemcpyDeviceToHost);
 
-    std::cout << "Resulting vector y:" << std::endl;
+    std::cout << "Resulting linear_algebra y:" << std::endl;
     for (auto val : h_y) {
         std::cout << val << " ";
     }
@@ -413,7 +413,7 @@ int main(int argc, char *argv[]) {
 
     hipMemcpy(h_y.data(), d_y, h_y.size() * sizeof(float), hipMemcpyDeviceToHost);
 
-    std::cout << "Resulting vector y:" << std::endl;
+    std::cout << "Resulting linear_algebra y:" << std::endl;
     for (auto val : h_y) {
         std::cout << val << " ";
     }
@@ -793,7 +793,7 @@ int main() {
     rocsparse_set_mat_type(descr, rocsparse_matrix_type_general);
     rocsparse_set_mat_index_base(descr, rocsparse_index_base_zero);
 
-    // Perform sparse matrix-vector multiplication: A * x -> temp_y
+    // Perform sparse matrix-linear_algebra multiplication: A * x -> temp_y
     rocsparse_scsrmv(sparse_handle, rocsparse_operation_none, N, M, nnz,
                      &alpha, descr, d_A_values, d_A_row_ptr, d_A_columns,
                      d_x, &alpha, d_y);

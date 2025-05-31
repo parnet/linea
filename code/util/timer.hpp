@@ -1,5 +1,4 @@
-#ifndef UTIL_TIMER_HPP
-#define UTIL_TIMER_HPP
+#pragma once
 
 #include <chrono>
 
@@ -44,4 +43,4 @@ public:
     }
 
 };
-#endif
+

@@ -1,6 +1,5 @@
+#pragma once
 
-#ifndef GENERATOR_STD_CRS_MATRIX_HPP
-#define GENERATOR_STD_CRS_MATRIX_HPP
 #include <iostream>
 
 #include "../data/crs_matrix.hpp"
@@ -139,4 +138,3 @@ CRS_Matrix create_laplacian_2d(size_t gridsize){ // 5 for 3 inner nodes and two 
     }*/
     return matrix;
 }
-#endif

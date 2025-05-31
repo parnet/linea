@@ -1,4 +1,1 @@
-#ifndef LINEA_LIB_OPENACC_HPP
-#define LINEA_LIB_OPENACC_HPP
-
-#endif
+#pragma once

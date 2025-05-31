@@ -1,5 +1,4 @@
-#ifndef LINEA_LIB_INTRINSICS_HPP
-#define LINEA_LIB_INTRINSICS_HPP
+#pragma once
 
 #ifdef USE_INTRINSICS
 
@@ -35,4 +34,3 @@
 #endif
 #endif
 
-#endif

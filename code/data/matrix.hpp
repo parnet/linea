@@ -1,11 +1,10 @@
-#ifndef DATA_MATRIX_HPP
-#define DATA_MATRIX_HPP
+#pragma once
 
 #include "std_flat_matrix.hpp"
 
-
+/**
+ * Typedef to set a MatrixType as primary matrix type
+ */
 
 using Matrix = Std_Flat_Matrix;
 
-
-#endif

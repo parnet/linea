@@ -1,6 +1,4 @@
-#ifndef DATA_C_ALIGNED_MATRIX_HPP
-#define DATA_C_ALIGNED_MATRIX_HPP
-
+#pragma once
 #include <sstream>
 
 
@@ -124,4 +122,3 @@ public:
     size_t _num_cols{};
     double * _data = nullptr;
 };
-#endif

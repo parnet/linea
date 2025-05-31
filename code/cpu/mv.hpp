@@ -1,5 +1,4 @@
-#ifndef CPU_MV_H
-#define CPU_MV_H
+#pragma once
 
 #include "../data/vector.hpp"
 #include "../data/c_vector.hpp"
@@ -51,7 +50,7 @@ void MatrixVectorMultiplikationCache(const C_Matrix & matrix_A, double alpha,  c
 /**
  * Matrix Vektor Multiplication
  *      $$y = alpha * A * x + beta * y$$
- * for a Naive Matrix and a Standard Vector std::vector<double>
+ * for a Naive Matrix and a Standard Vector std::linear_algebra<double>
  * without cache optimization
  */
 void MatrixVectorMultiplikation(const C_Matrix & matrix_A, double alpha,  const Vector & vektor_x, double beta, Vector & vektor_y) {
@@ -109,4 +108,3 @@ void MatrixVectorMultiplikationCache(const Std_Matrix & matrix_A, double alpha, 
     }
 }
 
-#endif

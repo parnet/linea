@@ -19,6 +19,8 @@ if (CMAKE_CUDA_COMPILER)
 #    message(STATUS "CUDA was not found")
 #    set(CMAKE_CXX_COMPILER nvcc)
 
+
+
     #elseif ()
     message(STATUS "[X]   CUDA version: ") # todo search for version
 else ()

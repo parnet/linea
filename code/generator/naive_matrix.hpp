@@ -1,5 +1,4 @@
-#ifndef GENERATOR_NAIVE_MATRIX_HPP
-#define GENERATOR_NAIVE_MATRIX_HPP
+#pragma once
 
 #include <cmath>
 #include <functional>
@@ -47,4 +46,3 @@ void create_laplacian_2d(C_Matrix &matrix,size_t gridsize){ // 5 for 3 inner nod
     matrix(rows-1,cols-1) = 1;
 }
 
-#endif

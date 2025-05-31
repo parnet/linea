@@ -1,5 +1,4 @@
-#ifndef UTIL_MODULES_HPP
-#define UTIL_MODULES_HPP
+#pragma once
 
 
 inline bool module_avail_blas() {
@@ -99,4 +98,3 @@ inline bool module_avail_opencl() {
 }
 
 
-#endif

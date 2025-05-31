@@ -1,8 +1,8 @@
-#ifndef DATA_STD_VECTOR_HPP
-#define DATA_STD_VECTOR_HPP
+#pragma once
 
 #include <vector>
-
+#include <iostream>
+#include <sstream>
 
 
 
@@ -87,4 +87,3 @@ public:
     std::vector<double> _data;
 };
 
-#endif

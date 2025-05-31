@@ -11,15 +11,17 @@
 
 #include "problem/heat_equation.hpp"
 //#include "benchmark/mv.hpp"
-#include "code/operations_blas.hpp"
+#include "blas/blas.hpp"
+#include "cuda/cusparse/bicgstab.cuh"
 #include "libs/cuda.hpp"
-#include "test/blas.h"
+
 #include "util/memory.hpp"
 
 
 
-int main()
+int main(int argc, char** argv)
 {
+    //test_main();
     //linea::openmp::info();
     // print_arch();
     // auto version = version_hdf5();
@@ -42,6 +44,7 @@ int main()
     //memory::info(Giga);
     //check_cuda_device();
     //benchmark_mv();
+    //benchmark_heat_equation();
     benchmark_heat_equation();
 
     return 0;

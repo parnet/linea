@@ -1,5 +1,4 @@
-#ifndef STD_FLAT_MATRIX_HPP
-#define STD_FLAT_MATRIX_HPP
+#pragma once
 
 #include <sstream>
 #include <string>
@@ -73,7 +72,7 @@ public:
     size_t memory_size() const {
         size_t total = 0;
         total += sizeof(size_t)*3;
-        total += sizeof(double)*_num_elements; // todo plus costs for std::vector?
+        total += sizeof(double)*_num_elements; // todo plus costs for std::linear_algebra?
         return total;
     }
 
@@ -95,4 +94,3 @@ public:
     size_t _num_cols;
     std::vector<double> _data;
 };
-#endif //STD_FLAT_MATRIX_HPP

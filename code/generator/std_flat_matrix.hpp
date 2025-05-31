@@ -1,5 +1,5 @@
-#ifndef GENERATOR_STD_FLAT_MATRIX_HPP
-#define GENERATOR_STD_FLAT_MATRIX_HPP
+#pragma once
+
 #include "../data/matrix.hpp"
 
 
@@ -39,5 +39,3 @@ void create_laplacian_2d(Matrix &matrix,size_t gridsize){ // 5 for 3 inner nodes
     }
     matrix(rows-1,cols-1) = 1;
 }
-
-#endif

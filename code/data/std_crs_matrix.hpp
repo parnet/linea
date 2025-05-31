@@ -1,6 +1,4 @@
-#ifndef DATA_STD_CRS_MATRIX_HPP
-#define DATA_STD_CRS_MATRIX_HPP
-
+#pragma once
 #include <utility>
 #include <vector>
 #include "std_matrix.hpp"
@@ -57,4 +55,3 @@ public:
     std::vector<int> _row_ptr;
 };
 
-#endif

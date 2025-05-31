@@ -1,5 +1,4 @@
-#ifndef UTIL_CONVERTER_HPP
-#define UTIL_CONVERTER_HPP
+#pragma once
 
 enum Unit {
     NONE,
@@ -53,4 +52,3 @@ inline std::string symbol(Unit unit ) {
     }
 }
 
-#endif

@@ -1,9 +1,7 @@
-#ifndef DATA_C_VECTOR_HPP
-#define DATA_C_VECTOR_HPP
+#pragma once
 
 #include <sstream>
 #include <string>
-
 
 
 
@@ -82,5 +80,3 @@ public:
 };
 
 
-
-#endif

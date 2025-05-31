@@ -1,4 +1,1 @@
-#ifndef LINEA_LIB_LAPACK_HPP
-#define LINEA_LIB_LAPACK_HPP
-
-#endif
+#pragma once

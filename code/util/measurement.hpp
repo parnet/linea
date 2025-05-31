@@ -1,5 +1,5 @@
-#ifndef UTIL_MEASUREMENT_HPP
-#define UTIL_MEASUREMENT_HPP
+#pragma once
+
 #include <map>
 #include <sstream>
 #include <string>
@@ -22,4 +22,3 @@ private:
     std::vector<std::string> keys;
     std::map<std::string,std::vector<double>> data;
 };
-#endif

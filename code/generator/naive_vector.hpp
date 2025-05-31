@@ -1,5 +1,4 @@
-#ifndef GENERATOR_NAIVE_VECTOR_H
-#define GENERATOR_NAIVE_VECTOR_H
+#pragma once
 
 #include <functional>
 #include <cmath>
@@ -35,4 +34,3 @@ inline void create_fun(C_Vector &v,const std::function<double (size_t)>& fun) {
         v.operator[](i) = fun(i);
     };
 }
-#endif

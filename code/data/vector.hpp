@@ -1,13 +1,8 @@
-#ifndef DATA_VECTOR_HPP
-#define DATA_VECTOR_HPP
-
+#pragma once
 #include "std_vector.hpp"
 
-
-
-
-
+/**
+ * Typedef to set a VectorType as primary vector type
+ */
 using Vector = Std_Vector;
 
-
-#endif

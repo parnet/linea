@@ -1,6 +1,4 @@
-#ifndef STD_ALIGNED_VECTOR_HPP
-#define STD_ALIGNED_VECTOR_HPP
-
+#pragma once
 #include <string>
 #include <vector>
 
@@ -77,4 +75,3 @@ public:
     std::vector<double> _data;
 };
 
-#endif

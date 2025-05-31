@@ -54,11 +54,11 @@ void benchmark_mv_nn(){
         std::cout << "time(laplacian)="<< time << std::endl;
 
         //std::cout << "memory(A)=" << memory_size << std::endl;
-        C_Vector vector = C_Vector(gridsize*gridsize);
+        C_Vector linear_algebra = C_Vector(gridsize*gridsize);
 
 
         timer.start();
-        create_sin_1d(vector);
+        create_sin_1d(linear_algebra);
         timer.stop();
         time = timer.get();
         std::cout << "time(interpolate)="<< time << std::endl;
@@ -72,7 +72,7 @@ void benchmark_mv_nn(){
         std::cout << "time(zerofill)="<< time << std::endl;
 
         timer.start();
-        MatrixVectorMultiplikation(matrix,1,vector,1,result);
+        MatrixVectorMultiplikation(matrix,1,linear_algebra,1,result);
         timer.stop();
         time = timer.get();
         std::cout << "time(alpha*A*x+beta*y)="<< time << std::endl;
@@ -105,11 +105,11 @@ void benchmark_mv_nnc(){
         std::cout << "time(laplacian)="<< time << std::endl;
 
         //std::cout << "memory(A)=" << memory_size << std::endl;
-        C_Vector vector = C_Vector(gridsize*gridsize);
+        C_Vector linear_algebra = C_Vector(gridsize*gridsize);
 
 
         timer.start();
-        create_sin_1d(vector);
+        create_sin_1d(linear_algebra);
         timer.stop();
         time = timer.get();
         std::cout << "time(interpolate)="<< time << std::endl;
@@ -123,7 +123,7 @@ void benchmark_mv_nnc(){
         std::cout << "time(zerofill)="<< time << std::endl;
 
         timer.start();
-        MatrixVectorMultiplikationCache(matrix,1,vector,1,result);
+        MatrixVectorMultiplikationCache(matrix,1,linear_algebra,1,result);
         timer.stop();
         time = timer.get();
         std::cout << "time(alpha*A'*x+beta*y)="<< time << std::endl;
@@ -157,11 +157,11 @@ void benchmark_mv_ns(){
         std::cout << "time(laplacian)="<< time << std::endl;
 
         //std::cout << "memory(A)=" << memory_size << std::endl;
-        Vector vector = Vector(gridsize*gridsize);
+        Vector linear_algebra = Vector(gridsize*gridsize);
 
 
         timer.start();
-        create_sin_1d(vector);
+        create_sin_1d(linear_algebra);
         timer.stop();
         time = timer.get();
         std::cout << "time(interpolate)="<< time << std::endl;
@@ -175,7 +175,7 @@ void benchmark_mv_ns(){
         std::cout << "time(zerofill)="<< time << std::endl;
 
         timer.start();
-        MatrixVectorMultiplikation(matrix,1,vector,1,result);
+        MatrixVectorMultiplikation(matrix,1,linear_algebra,1,result);
         timer.stop();
         time = timer.get();
         std::cout << "time(alpha*A*x+beta*y)="<< time << std::endl;
@@ -209,11 +209,11 @@ void benchmark_mv_ss(){
         std::cout << "time(laplacian)="<< time << std::endl;
 
         //std::cout << "memory(A)=" << memory_size << std::endl;
-        Vector vector = Vector(gridsize*gridsize);
+        Vector linear_algebra = Vector(gridsize*gridsize);
 
 
         timer.start();
-        create_sin_1d(vector);
+        create_sin_1d(linear_algebra);
         timer.stop();
         time = timer.get();
         std::cout << "time(interpolate)="<< time << std::endl;
@@ -227,7 +227,7 @@ void benchmark_mv_ss(){
         std::cout << "time(zerofill)="<< time << std::endl;
 
         timer.start();
-        MatrixVectorMultiplikation(matrix,1,vector,1,result);
+        MatrixVectorMultiplikation(matrix,1,linear_algebra,1,result);
         timer.stop();
         time = timer.get();
         std::cout << "time(alpha*A*x+beta*y)="<< time << std::endl;
@@ -261,11 +261,11 @@ void benchmark_mv_sfs(){
         std::cout << "time(laplacian)="<< time << std::endl;
 
         //std::cout << "memory(A)=" << memory_size << std::endl;
-        Vector vector = Vector(gridsize*gridsize);
+        Vector linear_algebra = Vector(gridsize*gridsize);
 
 
         timer.start();
-        create_sin_1d(vector);
+        create_sin_1d(linear_algebra);
         timer.stop();
         time = timer.get();
         std::cout << "time(interpolate)="<< time << std::endl;
@@ -279,7 +279,7 @@ void benchmark_mv_sfs(){
         std::cout << "time(zerofill)="<< time << std::endl;
 
         timer.start();
-        MatrixVectorMultiplikation(matrix,1,vector,1,result);
+        MatrixVectorMultiplikation(matrix,1,linear_algebra,1,result);
         timer.stop();
         time = timer.get();
         std::cout << "time(alpha*A*x+beta*y)="<< time << std::endl;
@@ -313,11 +313,11 @@ void benchmark_mv_sfs_openmp(){
         std::cout << "time(laplacian)="<< time << std::endl;
 
         //std::cout << "memory(A)=" << memory_size << std::endl;
-        Vector vector = Vector(gridsize*gridsize);
+        Vector linear_algebra = Vector(gridsize*gridsize);
 
 
         timer.start();
-        create_sin_1d(vector);
+        create_sin_1d(linear_algebra);
         timer.stop();
         time = timer.get();
         std::cout << "time(interpolate)="<< time << std::endl;
@@ -331,7 +331,7 @@ void benchmark_mv_sfs_openmp(){
         std::cout << "time(zerofill)="<< time << std::endl;
 
         timer.start();
-        MatrixVectorMultiplikationOpenMP(matrix,1,vector,1,result);
+        MatrixVectorMultiplikationOpenMP(matrix,1,linear_algebra,1,result);
         timer.stop();
         time = timer.get();
         std::cout << "time(alpha*A*x+beta*y)_openmp="<< time << std::endl;
@@ -363,11 +363,11 @@ void benchmark_mv_sfs_blas(){
         std::cout << "time(laplacian)="<< time << std::endl;
 
         //std::cout << "memory(A)=" << memory_size << std::endl;
-        Vector vector = Vector(gridsize*gridsize);
+        Vector linear_algebra = Vector(gridsize*gridsize);
 
 
         timer.start();
-        create_sin_1d(vector);
+        create_sin_1d(linear_algebra);
         timer.stop();
         time = timer.get();
         std::cout << "time(interpolate)="<< time << std::endl;
@@ -381,7 +381,7 @@ void benchmark_mv_sfs_blas(){
         std::cout << "time(zerofill)="<< time << std::endl;
 
         timer.start();
-        MatrixVectorMultiplikationBLAS(matrix,1,vector,1,result);
+        MatrixVectorMultiplikationBLAS(matrix,1,linear_algebra,1,result);
         timer.stop();
         time = timer.get();
         std::cout << "time(alpha*A*x+beta*y)_blas="<< time << std::endl;
@@ -414,11 +414,11 @@ void benchmark_mv_sfs_avx512(){
         std::cout << "time(laplacian)="<< time << std::endl;
 
         //std::cout << "memory(A)=" << memory_size << std::endl;
-        Vector vector = Vector(gridsize*gridsize);
+        Vector linear_algebra = Vector(gridsize*gridsize);
 
 
         timer.start();
-        create_sin_1d(vector);
+        create_sin_1d(linear_algebra);
         timer.stop();
         time = timer.get();
         std::cout << "time(interpolate)="<< time << std::endl;
@@ -432,7 +432,7 @@ void benchmark_mv_sfs_avx512(){
         std::cout << "time(zerofill)="<< time << std::endl;
 
         timer.start();
-        MatrixVectorMultiplikationAVX512(matrix,1,vector,1,result);
+        MatrixVectorMultiplikationAVX512(matrix,1,linear_algebra,1,result);
         timer.stop();
         time = timer.get();
         std::cout << "time(alpha*A*x+beta*y)_avx512="<< time << std::endl;
@@ -465,11 +465,11 @@ void benchmark_mv_sfs_noopt(){
         std::cout << "time(laplacian)="<< time << std::endl;
 
         //std::cout << "memory(A)=" << memory_size << std::endl;
-        Vector vector = Vector(gridsize*gridsize);
+        Vector linear_algebra = Vector(gridsize*gridsize);
 
 
         timer.start();
-        create_sin_1d(vector);
+        create_sin_1d(linear_algebra);
         timer.stop();
         time = timer.get();
         std::cout << "time(interpolate)="<< time << std::endl;
@@ -483,7 +483,7 @@ void benchmark_mv_sfs_noopt(){
         std::cout << "time(zerofill)="<< time << std::endl;
 
         timer.start();
-        MatrixVectorMultiplikationNoVectorization(matrix,1,vector,1,result);
+        MatrixVectorMultiplikationNoVectorization(matrix,1,linear_algebra,1,result);
         timer.stop();
         time = timer.get();
         std::cout << "time(alpha*A*x+beta*y)_noopt="<< time << std::endl;

@@ -1,5 +1,4 @@
-#ifndef SUFFIX_HPP
-#define SUFFIX_HPP
+#pragma once
 
 #include <cstddef>
 
@@ -35,5 +34,3 @@ constexpr std::size_t operator"" _GB(long double value) {
 constexpr std::size_t operator"" _TB(long double value) {
     return static_cast<std::size_t>(value * 1000 * 1000 * 1000 * 1000 );
 }
-
-#endif

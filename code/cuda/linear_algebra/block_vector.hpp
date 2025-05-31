@@ -1,0 +1,4 @@
+#ifndef CUDA_BLOCK_VECTOR_HPP
+#define CUDA_BLOCK_VECTOR_HPP
+
+#endif

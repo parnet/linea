@@ -1,10 +1,8 @@
-#ifndef CRS_MATRIX_HPP
-#define CRS_MATRIX_HPP
-
+#pragma once
 #include "std_crs_matrix.hpp"
 
-
+/**
+ * Typedef to set a CRSMatrixType as primary crs matrix type
+ */
 using CRS_Matrix = Std_CRS_Matrix;
 
-
-#endif

@@ -1,8 +1,6 @@
-#ifndef LINEA_LIB_BLAS_HPP
-#define LINEA_LIB_BLAS_HPP
+#pragma once
 
 #ifdef USE_BLASE
 #include <cblas.h>
 #endif
 
-#endif

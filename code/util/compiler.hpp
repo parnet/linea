@@ -1,5 +1,4 @@
-#ifndef UTIL_COMPILER_HPP
-#define UTIL_COMPILER_HPP
+#pragma once
 
 void print_arch() {
 
@@ -67,4 +66,3 @@ void print_arch() {
 
     << std::endl << std::flush;
 }
-#endif //COMPILER_HPP

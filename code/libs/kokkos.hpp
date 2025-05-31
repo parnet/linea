@@ -1,4 +1,1 @@
-#ifndef LINEA_LIB_KOKKOS_HPP
-#define LINEA_LIB_KOKKOS_HPP
-
-#endif
+#pragma once

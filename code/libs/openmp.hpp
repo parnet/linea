@@ -1,5 +1,4 @@
-#ifndef LINEA_LIB_OPENMP_HPP
-#define LINEA_LIB_OPENMP_HPP
+#pragma once
 #ifdef USE_OPENMP
 #include <iostream>
 
@@ -9,5 +8,4 @@ namespace linea::openmp {
 
     void info();
 }
-#endif
 #endif

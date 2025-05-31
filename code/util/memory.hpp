@@ -1,5 +1,4 @@
-#ifndef MEMORY_HPP
-#define MEMORY_HPP
+#pragma once
 
 
 #include "converter.hpp"
@@ -27,5 +26,3 @@ namespace memory {
 
 };
 
-
-#endif

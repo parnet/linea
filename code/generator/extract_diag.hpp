@@ -1,5 +1,4 @@
-#ifndef EXTRACT_DIAG_HPP
-#define EXTRACT_DIAG_HPP
+#pragma once
 
 #include <iostream>
 
@@ -53,5 +52,3 @@ inline void extract_diagonal(Vector & vec, const CRS_Matrix & matrix,double omeg
     }
 
 }
-
-#endif //EXTRACT_DIAG_HPP

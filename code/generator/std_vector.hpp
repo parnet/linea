@@ -1,5 +1,4 @@
-#ifndef GENERATOR_STD_VECTOR_HPP
-#define GENERATOR_STD_VECTOR_HPP
+#pragma once
 
 #include <functional>
 #include <cmath>
@@ -57,4 +56,3 @@ inline void fill_with_random(Vector& vec, unsigned int seed) {
     }
 }
 
-#endif

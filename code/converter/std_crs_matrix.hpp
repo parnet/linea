@@ -1,5 +1,4 @@
-#ifndef STD_CRS_MATRIX_HPP
-#define STD_CRS_MATRIX_HPP
+#pragma once
 
 #include "../data/c_matrix.hpp"
 #include "../data/std_matrix.hpp"
@@ -70,5 +69,3 @@ CRS_Matrix std_crs_from_matrix(Matrix &matrix) {
     return CRS_Matrix(_num_rows,_num_cols,_data,_col_index,_row_ptr);
 }
 
-
-#endif

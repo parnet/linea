@@ -1,5 +1,5 @@
-#ifndef ALIGNED_ALLOCATOR_HPP
-#define ALIGNED_ALLOCATOR_HPP
+#pragma once
+
 #include <cstddef>
 #include <cstdlib>
 #include <new>
@@ -19,4 +19,4 @@ struct AlignedAllocator {
     }
 };
 
-#endif
+//   std::vector<float, AlignedAllocator<float, ALIGNMENT>> aligned_vec(ELEMENTS, 0.0f);

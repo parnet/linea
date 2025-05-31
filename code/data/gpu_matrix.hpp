@@ -1,5 +1,4 @@
-#ifndef GPU_MATRIX_HPP
-#define GPU_MATRIX_HPP
+#pragma once
 
 
 class GPU_MATRIX {
@@ -35,4 +34,3 @@ class GPU_MATRIX {
     bool on_device = false;
 
 };
-#endif

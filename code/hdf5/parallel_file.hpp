@@ -1,7 +1,5 @@
-#ifndef HDF5_PARALLELFILE_HPP
-#define HDF5_PARALLELFILE_HPP
+#pragma once
 
 #include <H5Cpp.h>
 
 
-#endif

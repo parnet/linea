@@ -1,9 +1,12 @@
 
+#ifdef USE_CUDA
+
 #include "vector.hpp"
 
 #include "cuda/definitions.hpp"
 
 #include "kernel/sum_of_squares.cuh"
+
 
 double sum_of_squares(const CUDA_Vector & x, cudaStream_t stream) {
     constexpr int blockSize = CUDA_BLOCK_SIZE;
@@ -20,3 +23,4 @@ double sum_of_squares(const CUDA_Vector & x, cudaStream_t stream) {
     delete[] h_block_sums;
     return sum;
 }
+#endif

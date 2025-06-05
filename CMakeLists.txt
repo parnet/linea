@@ -46,11 +46,7 @@ set(ENABLE_MPI "OFF" CACHE STRING "MPI library usage")
 if (ENABLE_MPI)
     include(cmake/mpi.cmake)
 endif ()
-# ----------------------------------------------------------------------------------------------------------------------
-set(ENABLE_OPENMP "OFF" CACHE STRING "OpenMP library usage")
-if (ENABLE_OPENMP)
-    include(cmake/openmp.cmake)
-endif ()
+
 # ----------------------------------------------------------------------------------------------------------------------
 
 set(ENABLE_CUDA "OFF" CACHE STRING "CUDA library usage")
@@ -65,7 +61,18 @@ endif ()
 # ----------------------------------------------------------------------------------------------------------------------
 set(ENABLE_HIP "OFF" CACHE STRING "HIP library usage")
 if (ENABLE_HIP)
+    set(CMAKE_HIP_ARCHITECTURES gfx1103)
     include(cmake/hip.cmake)
+endif ()
+# ----------------------------------------------------------------------------------------------------------------------
+set(ENABLE_OPENMP "OFF" CACHE STRING "OpenMP library usage")
+if (ENABLE_OPENMP)
+    include(cmake/openmp.cmake)
+endif ()
+# ----------------------------------------------------------------------------------------------------------------------
+set(ENABLE_OFFLOADING "OFF" CACHE STRING "Offloading usage")
+if (ENABLE_OFFLOADING)
+    include(cmake/offloading.cmake)
 endif ()
 # ----------------------------------------------------------------------------------------------------------------------
 set(ENABLE_KOKKOS "OFF" CACHE STRING "KOKKOS library usage")
@@ -109,9 +116,11 @@ if (ENABLE_LUA)
 endif ()
 # ----------------------------------------------------------------------------------------------------------------------
 
-include_directories(${CUDA_INCLUDE_DIRS})
-include_directories(${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
-include_directories(${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRS})
+if(ENABLE_CUDA)
+    include_directories(${CUDA_INCLUDE_DIRS})
+    include_directories(${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
+    include_directories(${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRS})
+endif ()
 
 add_executable(${PROJECT_NAME}
         main.cpp
@@ -169,10 +178,9 @@ add_executable(${PROJECT_NAME}
         code/libs/openmp.cpp
         code/data/gpu_matrix.hpp
         todo/integrate.hpp
-        todo/main.hpp
         todo/polynom.hpp
         todo/vector.hpp
-        problem/heat_equation.hpp
+        problem/cuda_heat_equation.hpp
         code/generator/extract_diag.hpp
         code/cuda/cusparse/bicgstab.cu
         code/cuda/cusparse/bicgstab.cuh
@@ -236,11 +244,40 @@ add_executable(${PROJECT_NAME}
         code/cpu/linear_algebra/block_crs_matrix.hpp
         code/cpu/linear_algebra/block_vector.hpp
         code/cpu/linear_algebra/block_matrix.hpp
-
+        code/sys_info.hpp
+        code/cpu/block_vector.cpp
+        code/cpu/block_vector.hpp
+        hw/mi300a.hpp
+        code/hip/data/block_crs_matrix.hpp
+        code/hip/data/block_matrix.hpp
+        code/hip/data/block_vector.hpp
+        code/hip/data/crs_matrix.hpp
+        code/hip/data/matrix.hpp
+        code/hip/data/vector.hpp
+        code/hip/linear_algebra/block_crs_matrix.hpp
+        code/hip/linear_algebra/block_matrix.hpp
+        code/hip/linear_algebra/block_vector.hpp
+        code/hip/linear_algebra/crs_matrix.hpp
+        code/hip/linear_algebra/matrix.hpp
+        code/hip/linear_algebra/vector.hpp
+        code/hip/linear_algebra/kernel/block_matrix_vector_multitplication.hip
+        code/hip/linear_algebra/kernel/block_matrix_vector_multitplication.hpp
+        problem/hip_heat_equation.hpp
+        problem/heat_equation.hpp
+        code/hip/linear_algebra/kernel/sum_of_squares.hip
+        code/hip/linear_algebra/kernel/sum_of_squares.hpp
+        code/hip/linear_algebra/kernel/jacobi_step.hip
+        code/hip/linear_algebra/kernel/jacobi_step.hpp
+        code/hip/linear_algebra/kernel/crs_residual.hip
+        code/hip/linear_algebra/kernel/crs_residual.hpp
+        code/hip/definitions.hpp
+        code/macro/cuda_error.hpp
+        code/macro/hip_error.hpp
 )
 
-find_package(CUDAToolkit REQUIRED)
-
+if(ENABLE_CUDA)
+    find_package(CUDAToolkit REQUIRED)
+endif ()
 
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
@@ -249,14 +286,23 @@ message(STATUS "CXX flags: ${CMAKE_CXX_FLAGS}")
 
 # find_package(CUDAToolkit REQUIRED)
 if (ENABLE_CUDA)
-target_link_libraries(${PROJECT_NAME} PRIVATE CUDA::cublas)
+    target_link_libraries(${PROJECT_NAME} PRIVATE CUDA::cublas)
+
+    target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
+    target_link_libraries(${PROJECT_NAME} PRIVATE cudart)
+    set_target_properties(${PROJECT_NAME} PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+
+    target_link_libraries(${PROJECT_NAME} PRIVATE CUDA::cublas CUDA::cusparse CUDA::cudart)
 endif ()
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
-target_link_libraries(${PROJECT_NAME} PRIVATE cudart)
-set_target_properties(${PROJECT_NAME} PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+if (ENABLE_HIP)
+    # target_link_libraries(${PROJECT_NAME} PRIVATE hip::host hip::hipBLAS)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE CUDA::cublas CUDA::cusparse CUDA::cudart)
+    target_link_libraries(${PROJECT_NAME} PRIVATE hip::host)
+    #target_link_libraries(${PROJECT_NAME} PRIVATE hip::device /opt/rocm/lib/libhipsparse.so)
+
+endif ()
+
 #add_executable(${PROJECT_NAME} ${SOURCES} )
 #message(VERBOSE "Binary directory is: " ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 #set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})

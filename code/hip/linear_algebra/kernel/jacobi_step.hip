@@ -1,10 +1,8 @@
 
+#include "jacobi_step.hpp"
+#include "hip/definitions.hpp"
 
-
-
-#include "jacobi_step.cuh"
-
-__global__ void cu_jacobi_step_kernel(
+__global__ void hip_jacobi_step_kernel(
     double* __restrict__ x_new,
     const double* __restrict__ x_old,
     const double* __restrict__ omega_D_inv,// omega * D^{-1} precomputed
@@ -18,16 +16,16 @@ __global__ void cu_jacobi_step_kernel(
 }
 
 
-void cu_jacobi_step_launch(
+void hip_jacobi_step_launch(
     double* x_new,
     const double* x_old,
     const double* omega_D_inv,
     const double* defect,
     int num_rows,
-    cudaStream_t stream  // default: stream 0 (default stream)
+    hipStream_t stream  // default: stream 0 (default stream)
 ) {
-    constexpr int blockSize = 256;
+    constexpr int blockSize = HIP_BLOCK_SIZE;
     const int gridSize = (num_rows + blockSize - 1) / blockSize;
 
-    cu_jacobi_step_kernel<<<gridSize, blockSize, 0, stream>>>(x_new, x_old, omega_D_inv, defect, num_rows);
+    hip_jacobi_step_kernel<<<gridSize, blockSize, 0, stream>>>(x_new, x_old, omega_D_inv, defect, num_rows);
 }

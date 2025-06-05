@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef USE_CUDA
+
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
@@ -32,3 +34,4 @@ int gpu_BiCGStab(cublasHandle_t       cublasHandle,
                  double               tolerance);
 int test_main(CRS_Matrix mat);
 
+#endif

@@ -1,0 +1,1 @@
+#define HIP_BLOCK_SIZE 32

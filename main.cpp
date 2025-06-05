@@ -9,16 +9,58 @@
 
 //#include "test/std_matrix.hpp"
 
-#include "problem/heat_equation.hpp"
+//#include "problem/heat_equation.hpp"
 //#include "benchmark/mv.hpp"
-#include "blas/blas.hpp"
+//#include "blas/blas.hpp"
 #include "cuda/cusparse/bicgstab.cuh"
 #include "libs/cuda.hpp"
 
 #include "util/memory.hpp"
 
+//#include <hip/hip_runtime.h>
+#include <iostream>
+#include <vector>
+#include <cmath>
 
 
+
+#include <omp.h>
+
+#include "problem/heat_equation.hpp"
+
+int main(int argc, char** argv) {
+/*#ifdef USE_HIP
+    std::cout << "    using HIP" << std::endl;
+    std::string gfx_version = "11.0.0";
+    if (argc > 1) {
+        gfx_version = argv[1];
+    }
+    std::string env_var = "HSA_OVERRIDE_GFX_VERSION=" + gfx_version;
+    putenv(const_cast<char*>(env_var.c_str()));
+    std::cout << " with GFX version " << gfx_version << std::endl;
+#endif*/
+
+
+
+    int count = 0;
+    hipGetDeviceCount(&count);
+    printf("HIP Devices: %d\n", count);
+
+    hipDeviceProp_t prop;
+    hipGetDeviceProperties(&prop, 0);
+    std::cout << "Running on device: "<< prop.name << " (arch "<< prop.gcnArchName << ")\n";
+
+    hipSetDevice(0);
+
+
+
+
+    benchmark_heat_equation();
+
+}
+
+
+/*
 int main(int argc, char** argv)
 {
     //test_main();
@@ -48,7 +90,7 @@ int main(int argc, char** argv)
     benchmark_heat_equation();
 
     return 0;
-}
+}*/
 
 /***
  * dense max matrix size gridsize = 257

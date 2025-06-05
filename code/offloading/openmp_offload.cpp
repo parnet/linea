@@ -1,4 +1,4 @@
-
+#ifdef USE_OFFLOADING
 #include "openmp_offload.hpp"
 
 void operation(int N, const double * matrix_A, double alpha,  const double *  vektor_x, double beta, double * vektor_y) {
@@ -18,3 +18,4 @@ void Operations_OpenMP_Offload::matrix_vector_multiplikation(const Matrix & matr
 }
 
 
+#endif

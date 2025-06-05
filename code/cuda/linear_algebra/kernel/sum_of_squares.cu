@@ -34,7 +34,6 @@ void cu_sum_of_squares_launcher(const double* x, double* block_sums, int N, cuda
     int blocksPerGrid = (N + threadsPerBlock - 1) / threadsPerBlock;
     size_t sharedMemSize = threadsPerBlock * sizeof(double);
 
-
     double* d_block_sums;
     cudaMalloc(&d_block_sums, blocksPerGrid * sizeof(double));
 
@@ -43,9 +42,9 @@ void cu_sum_of_squares_launcher(const double* x, double* block_sums, int N, cuda
     if (err != cudaSuccess) {
         printf("Kernel launch error: %s\n", cudaGetErrorString(err));
     }
+
     cudaStreamSynchronize(stream);
     cudaMemcpy(block_sums, d_block_sums, blocksPerGrid * sizeof(double), cudaMemcpyDeviceToHost);
 
     cudaFree(d_block_sums);
-
 }

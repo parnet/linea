@@ -6,11 +6,12 @@ endif()
 
 find_package(hip QUIET)
 find_package(hipblas QUIET)
-find_package(hipsparse QUIET)
-find_package(hipsolver QUIET)
+#find_package(hipsparse QUIET)
+#find_package(hipsolver QUIET)
 
 
 if (hip_FOUND)
+    enable_language(HIP)
     execute_process(
             COMMAND hipconfig --version
             OUTPUT_VARIABLE HIP_VERSION
@@ -53,12 +54,6 @@ message(STATUS "hip::host is of type: ${target_type}")
 
 
 
-target_link_libraries(hipxampel )
-target_link_libraries(hipsparse-test PRIVATE hip::host hip::hipBLAS)
-target_link_libraries(hipsparse-test PRIVATE hip::host hip::hipBLAS)
-target_link_libraries(hipblas_example PRIVATE hip::device /opt/rocm/lib/libhipsparse.so)
-target_link_libraries(hipblas_example PRIVATE hip::device /opt/rocm/lib/libhipsparse.so)
-
 execute_process(
         COMMAND hipconfig --version
         OUTPUT_VARIABLE HIP_VERSION
@@ -80,6 +75,13 @@ message(STATUS "HIP compiler: ${HIP_HIPCC_EXECUTABLE}")
 
 get_target_property(TARGETS hip::host IMPORTED_LOCATION)
 message(STATUS "hip::host found at: ${TARGETS}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --target=amd-amdhsa --offload-arch=gfx1100")
+# --target=amd-amdhsa
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  --offload-arch=gfx1103") # --offload-arch=gfx1103
 set(CMAKE_CXX_COMPILER "${HIP_HIPCC_EXECUTABLE}")
+set(CMAKE_HIP_ARCHITECTURES "gfx1103")
+
+#set(CMAKE_CXX_COMPILER /usr/bin/hipcc)
+#set(CMAKE_C_COMPILER /usr/bin/hipcc)
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  --rocm-device-lib-path=/usr/lib64/rocm/llvm/lib/clang/18/amdgcn/bitcode")
+
 #project(hipBLAS_example LANGUAGES HIP CXX)

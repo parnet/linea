@@ -1,5 +1,8 @@
 #pragma once
 
+#ifdef USE_CUDA
 void cu_sum_of_squares_kernel(const double* x, double* block_sums, int N);
 
 void cu_sum_of_squares_launcher(const double* x, double* block_sums, int N, cudaStream_t stream);
+
+#endif

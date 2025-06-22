@@ -1,4 +1,6 @@
 #pragma once
+#include "cpu_heat_equation.hpp"
+#include "hipsparse_heat_equation.hpp"
 #include "hip_heat_equation.hpp"
 
 
@@ -22,8 +24,10 @@ inline  void benchmark_heat_equation() {
     //hip_heat_equation(1448, 1448, 0, 2.0, 512);
     //hip_heat_equation(2048, 2048, 0, 2.0, 512);
     //hip_heat_equation(2896, 2896, 0, 2.0, 512);
-    hip_heat_equation(4096, 4096, 0, 2.0, 512);
-
+    hip_heat_equation(1, 1, 0, 2.0, 512);
+    hip_heat_equation(2048, 2048, 0, 2.0, 512);
+    // hipsparse_heat_equation(2048, 2048, 0, 2.0, 512);
+    cpu_heat_equation(2048,2048,0,2.0,512);
 
 
     //std::linear_algebra<std::linear_algebra<double>> dense_matrix;

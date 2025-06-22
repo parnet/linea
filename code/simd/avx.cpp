@@ -1,5 +1,5 @@
 #include "../libs/intrinsics.hpp"
-#ifdef USE_AVX
+#ifdef USE_AVX__T // todo
 #include "operations_avx.hpp"
 void Operations_AVX::matrix_vector_multiplikation(const Matrix &matrix_A, double alpha,
                                                 const Vector &vektor_x, double beta, Vector &vektor_y) {

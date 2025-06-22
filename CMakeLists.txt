@@ -1,5 +1,5 @@
 # ===================[ general CMake settings ]=========================================================================
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.10)
 set(PROJECT_NAME "Linea" LANGUAGES CXX)
 
 project(${PROJECT_NAME})
@@ -273,6 +273,10 @@ add_executable(${PROJECT_NAME}
         code/hip/definitions.hpp
         code/macro/cuda_error.hpp
         code/macro/hip_error.hpp
+        code/hip/info/device_property.hpp
+        problem/cpu_heat_equation.hpp
+        problem/hipsparse_heat_equation.hpp
+        problem/vec_print.hpp
 )
 
 if(ENABLE_CUDA)
@@ -333,6 +337,7 @@ if(Kokkos_LIBRARIES)
 endif ()
 #target_link_libraries(${PROJECT_NAME} PRIVATE ${BLAS_LIBRARIES})
 
+target_compile_options(${PROJECT_NAME} PRIVATE -march=native)
 
 # ===================[ project properties  ]============================================================================
 

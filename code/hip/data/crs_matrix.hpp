@@ -1,5 +1,5 @@
 #pragma once
-
+#ifdef USE_HIP
 
 #include <hip/hip_runtime_api.h>
 
@@ -47,3 +47,4 @@ public:
     }
 };
 
+#endif

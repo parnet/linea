@@ -26,9 +26,22 @@
 
 #include <omp.h>
 
+#include "hip/info/device_property.hpp"
 #include "problem/heat_equation.hpp"
 
 int main(int argc, char** argv) {
+    omp_set_num_threads(8);
+#pragma omp parallel
+    {
+        int tid = omp_get_thread_num();
+        int nthreads = omp_get_num_threads();
+
+#pragma omp critical
+        printf("Thread %d out of %d threads\n", tid, nthreads);
+    }
+
+    benchmark_heat_equation();
+    //hardware_limit();
 /*#ifdef USE_HIP
     std::cout << "    using HIP" << std::endl;
     std::string gfx_version = "11.0.0";
@@ -40,7 +53,7 @@ int main(int argc, char** argv) {
     std::cout << " with GFX version " << gfx_version << std::endl;
 #endif*/
 
-
+/*
 
     int count = 0;
     hipGetDeviceCount(&count);
@@ -56,7 +69,7 @@ int main(int argc, char** argv) {
 
 
     benchmark_heat_equation();
-
+*/
 }
 
 

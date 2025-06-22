@@ -1,7 +1,7 @@
 
 #include "../libs/intrinsics.hpp"
-#ifdef USE_AVX512
-#include "operations_avx512.hpp"
+#ifdef USE_AVX512_K
+#include "simd/operations_avx512.hpp"
 
 void Operations_AVX512::matrix_vector_multiplikation(const Matrix &matrix_A, double alpha, const Vector &vektor_x,double beta , Vector &vektor_y) {
     const size_t mr = matrix_A._num_rows;

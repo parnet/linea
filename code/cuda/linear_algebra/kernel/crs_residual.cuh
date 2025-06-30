@@ -1,5 +1,5 @@
 #pragma once
-
+#ifdef USE_CUDA
 #include "cuda/data/crs_matrix.hpp"
 #include "cuda/data/vector.hpp"
 
@@ -39,3 +39,4 @@ inline void crs_residual(CUDA_Vector& d, const CUDA_CRS_Matrix& A, const CUDA_Ve
                 stream);
 }
 
+#endif

@@ -168,8 +168,6 @@ inline void cuda_bicgstab_heat_equation(int Nx, int Ny, double t0, double tn, in
     Vector laplace_diag = Vector(laplace_matrix._num_rows);
     extract_diagonal(laplace_diag, laplace_matrix, 0.66);
 
-    //vec_print("cu_laplace_diag",laplace_diag,  Nx, Ny)
-
     auto cu_laplace_diag = CUDA_Vector(laplace_diag);
 
     Vector x0 = Vector(Nx*Nx);
@@ -178,7 +176,6 @@ inline void cuda_bicgstab_heat_equation(int Nx, int Ny, double t0, double tn, in
     auto cu_x0 = CUDA_Vector(x0);
     cudaStreamSynchronize(cu_x0.stream);
 
-    //    vec_print("x0",x0,  Nx, Ny);
 
     Vector rhs = Vector(Nx*Nx);
     laplace_rhs_function(rhs,Nx,Nx,alpha);
@@ -248,39 +245,3 @@ inline void cuda_bicgstab_heat_equation(int Nx, int Ny, double t0, double tn, in
     std::cout << normer[max_iteration-1] << std::endl;
 }
 
-
-inline  void benchmark_heat_equation() {
-    //omp_set_num_threads(8);
-    //heat_equation(5, 5, 0, 2.0, 512);
-
-    cuda_heat_equation(1, 1, 0, 2.0, 512);
-
-    //cuda_heat_equation(1024, 1024, 0, 2.0, 512);
-    //cuda_heat_equation(1448, 1448, 0, 2.0, 512);
-    //cuda_heat_equation(2048, 2048, 0, 2.0, 512);
-    //cuda_heat_equation(2896, 2896, 0, 2.0, 512);
-
-    //cuda_heat_equation(2048, 2048, 0, 2.0, 512);
-
-
-    //std::linear_algebra<std::linear_algebra<double>> dense_matrix;
-    //crs_to_dense(dense_matrix, laplace_matrix._data,laplace_matrix._col_index,laplace_matrix._row_ptr,laplace_matrix._num_rows,laplace_matrix._num_cols);
-    //    std::cout << "matrix" << std::endl;
-    //    for ( int i = 0; i < Nx*Nx; i++ ) {
-    //        std::cout << "[";
-    //        for ( int j = 0; j < Nx*Nx; j++ ) {
-    //            std::cout << dense_matrix[i][j] << ", ";
-    //        }
-    //        std::cout <<"],"<< std::endl;
-    //}
-    //std::cout << std::endl;
-
-
-    //int Nx = 16;
-    //CRS_Matrix laplace_matrix = create_laplacian_2d(Nx);
-    //test_main(laplace_matrix);
-
-    orig_main();
-
-
-}

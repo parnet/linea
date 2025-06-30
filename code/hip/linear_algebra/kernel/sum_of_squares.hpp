@@ -1,3 +1,4 @@
+#ifdef USE_HIP
 #pragma once
 #include <hip/hip_runtime_api.h>
 
@@ -9,4 +10,5 @@ __global__ void hip_sum_of_squares_kernel(const double* x, double* block_sums, i
 void hip_sum_of_squares_launcher(const double* x, double* block_sums, int N, hipStream_t stream);
 
 double hip_sum_of_squares(const HIP_Vector & x, hipStream_t stream);
+#endif
 #endif

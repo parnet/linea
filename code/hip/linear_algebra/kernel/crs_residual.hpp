@@ -1,3 +1,5 @@
+#ifdef USE_HIP
+
 #pragma once
 
 #include <hip/hip_runtime.h>
@@ -41,3 +43,4 @@ inline void hip_crs_residual(HIP_Vector& d, const HIP_CRS_Matrix& A, const HIP_V
                 stream);
 }
 
+#endif

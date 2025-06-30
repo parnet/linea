@@ -1,3 +1,4 @@
+#ifdef USE_HIP
 #pragma once
 #include <hip/hip_runtime.h>
 #include "hip/data/vector.hpp"
@@ -31,3 +32,4 @@ inline void hip_jacobi_step(HIP_Vector &x_new,
         x_new._num_rows,
         stream);
 };
+#endif

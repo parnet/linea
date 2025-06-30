@@ -58,7 +58,7 @@ inline  void benchmark_heat_equation() {
 
     cuda_heat_equation(1, 1, 0, 2.0, 512); // dummy to warm up gpu
     cuda_heat_equation(2048, 2048, 0, 2.0, 512);
-    cpu_heat_equation( 2048, 2048, 0, 2.0, 512);
+    //cpu_heat_equation( 2048, 2048, 0, 2.0, 512);
 
 
     //std::linear_algebra<std::linear_algebra<double>> dense_matrix;

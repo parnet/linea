@@ -1,3 +1,4 @@
+#ifdef USE_HIP
 #pragma once
 
 #include <omp.h>
@@ -242,3 +243,4 @@ inline void hip_bicgstab_heat_equation(int Nx, int Ny, double t0, double tn, int
     std::cout << "rhs=" << convert(rhs.memory_size(),Mega) <<" ["<<symbol(Mega)<<"]"<< std::endl;
     std::cout << normer[max_iteration-1] << std::endl;
 }
+#endif

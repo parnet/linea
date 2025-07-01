@@ -1,7 +1,6 @@
 #pragma once
-#include "cuda/matrix_vector_multiplikation.cuh"
-#include "../data/matrix.hpp"
-#include "../data/vector.hpp"
+#include "data/vector.hpp"
+#include "data/matrix.hpp"
 
 
 struct  Operations_CUDA {

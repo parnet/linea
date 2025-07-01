@@ -22,7 +22,7 @@ if (CMAKE_CUDA_COMPILER)
 
 
     #elseif ()
-    message(STATUS "[X]   CUDA version: ") # todo search for version
+    message(STATUS "[X]   CUDA version: ${CMAKE_CUDA_COMPILER_VERSION}") # todo search for version
 else ()
     message(STATUS "[ ]   CUDA was not found")
 endif ()

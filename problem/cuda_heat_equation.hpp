@@ -32,7 +32,7 @@ inline void vec_print(const char * name, Vector & vec, int Nx,int  Ny) {
     std::cout << std::endl;
 }
 
-inline void cuda_heat_equation(int Nx, int Ny, double t0, double tn, int Nt) {
+inline void laplacian(int Nx, int Ny, double t0, double tn, int Nt) {
     Timer walltime;
     walltime.start();
     std::cout << "heat_equation" <<std::endl;

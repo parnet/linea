@@ -247,7 +247,6 @@ add_executable(${PROJECT_NAME}
         code/sys_info.hpp
         code/cpu/block_vector.cpp
         code/cpu/block_vector.hpp
-        hw/mi300a.hpp
         code/hip/data/block_crs_matrix.hpp
         code/hip/data/block_matrix.hpp
         code/hip/data/block_vector.hpp
@@ -277,6 +276,14 @@ add_executable(${PROJECT_NAME}
         problem/cpu_heat_equation.hpp
         problem/hipsparse_heat_equation.hpp
         problem/vec_print.hpp
+        code/mpi_omp_cuda/data/crs_matrix.hpp
+        code/mpi_omp_cuda/distribution.hpp
+        code/mpi_omp_cuda/laplacian.hpp
+        code/mpi_omp_cuda/create_laplacian.hpp
+        code/mpi_omp_cuda/kernel/kernel.cuh
+        code/mpi_omp_cuda/kernel/kernel.cu
+        code/mpi_omp_cuda/kernel/bridge.hpp
+        code/mpi_omp_cuda/host/host.hpp
 )
 
 if(ENABLE_CUDA)
@@ -307,6 +314,10 @@ if (ENABLE_HIP)
 
 endif ()
 
+if (ENABLE_MPI)
+    target_include_directories(${PROJECT_NAME} PRIVATE ${MPI_INCLUDE_PATH})
+    target_link_libraries(${PROJECT_NAME} PRIVATE MPI::MPI_CXX)
+endif ()
 #add_executable(${PROJECT_NAME} ${SOURCES} )
 #message(VERBOSE "Binary directory is: " ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 #set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})

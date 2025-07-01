@@ -1,114 +1,54 @@
 #include <iostream>
-
-// #include "hdf5/version.hpp"
-//#include "benchmark/csrmv.hpp"
-//#include "code/util/compiler.hpp"
-//#include "code/generator/std_matrix.hpp"
-//#include "code/openmp/general.hpp"
-
-
-//#include "test/std_matrix.hpp"
-
-//#include "problem/heat_equation.hpp"
-//#include "benchmark/mv.hpp"
-//#include "blas/blas.hpp"
-#include "cuda/cusparse/bicgstab.cuh"
-#include "libs/cuda.hpp"
-
-#include "util/memory.hpp"
-
-//#include <hip/hip_runtime.h>
-#include <iostream>
-#include <vector>
-#include <cmath>
-
-
-
 #include <omp.h>
 
-#include "hip/info/device_property.hpp"
-#include "problem/heat_equation.hpp"
+#include "mpi_omp_cuda/create_laplacian.hpp"
+
+
 
 int main(int argc, char** argv) {
-    omp_set_num_threads(8);
+    int provided;
+    MPI_Init_thread(&argc, &argv, MPI_THREAD_FUNNELED, &provided);
+
+    int row_size = 105;
+    int size = 10;
+    for (int i = 0; i < size; i++){
+        std::cout << "Rank = " << i << std::endl;
+        auto matrix = create_laplacian_2d(32, i, size);
+        std::cout <<  matrix._index_offset << ", " << matrix._num_local_rows << std::endl;
+        std::cout << "data=";
+        for (int k = 0; k < matrix._values.size(); k++) {
+            std::cout << matrix._values[k] << ", ";
+        }
+        std::cout << std::endl;
+    }
+    return 0;
+
+    if (provided < MPI_THREAD_FUNNELED) {
+        std::cerr << "[MPI] Error: MPI implementation does not provide required threading support!" << std::endl;
+        MPI_Abort(MPI_COMM_WORLD, 1);
+    }
+
+    int world_size;
+    MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+    std::cout << "[MPI] world size: " << world_size << std::endl;
+
+
+    int world_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+    std::cout << "[MPI] current rank: " << world_rank << std::endl;
+
+
 #pragma omp parallel
     {
-        int tid = omp_get_thread_num();
-        int nthreads = omp_get_num_threads();
-
-#pragma omp critical
-        printf("Thread %d out of %d threads\n", tid, nthreads);
+#pragma omp master
+        {
+            int thread_count = 0;
+            thread_count = omp_get_num_threads();
+            std::cout << "[OpenMP] Number of threads: " << thread_count << std::endl << std::endl;
+        }
     }
 
-    benchmark_heat_equation();
-    //hardware_limit();
-/*#ifdef USE_HIP
-    std::cout << "    using HIP" << std::endl;
-    std::string gfx_version = "11.0.0";
-    if (argc > 1) {
-        gfx_version = argv[1];
-    }
-    std::string env_var = "HSA_OVERRIDE_GFX_VERSION=" + gfx_version;
-    putenv(const_cast<char*>(env_var.c_str()));
-    std::cout << " with GFX version " << gfx_version << std::endl;
-#endif*/
+    // benchmark_heat_equation();
 
-/*
-
-    int count = 0;
-    hipGetDeviceCount(&count);
-    printf("HIP Devices: %d\n", count);
-
-    hipDeviceProp_t prop;
-    hipGetDeviceProperties(&prop, 0);
-    std::cout << "Running on device: "<< prop.name << " (arch "<< prop.gcnArchName << ")\n";
-
-    hipSetDevice(0);
-
-
-
-
-    benchmark_heat_equation();
-*/
 }
 
-
-/*
-int main(int argc, char** argv)
-{
-    //test_main();
-    //linea::openmp::info();
-    // print_arch();
-    // auto version = version_hdf5();
-    // std::cout << "HDF5: "<< version.str() << std::endl;
-    // StdMatrix empty_matrix = StdMatrix(0,0);
-    // StdCRSMatrix matrix = StdCRSMatrix(empty_matrix);
-
-    // create_laplacian_2d(matrix,5);
-    //std::cout << 7*7*7*7 << std::endl;
-    // std::cout << matrix.str() << std::endl;
-
-    // gneral_matrix_test();
-    //benchmark_mv();
-    //blas_mv_test();
-    //double x;
-    //std::cin >> x;
-    //gneral_matrix_test_blas();
-    //benchmark_mv();
-    //std::cout <<  2* (1 << 7) +1  << std::endl;
-    //memory::info(Giga);
-    //check_cuda_device();
-    //benchmark_mv();
-    //benchmark_heat_equation();
-    benchmark_heat_equation();
-
-    return 0;
-}*/
-
-/***
- * dense max matrix size gridsize = 257
- * 257 * 257 total grid points
- * 257 * 257 x 257 * 257 matrix size
- * 66'049 x 66'049
- * 4'362'470'401 Einträge insgesamt
- ***/

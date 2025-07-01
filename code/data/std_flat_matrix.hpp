@@ -89,8 +89,8 @@ public:
     }
 
 public:
-    size_t _num_elements;
-    size_t _num_rows;
-    size_t _num_cols;
+    int _num_elements;
+    int _num_rows;
+    int _num_cols;
     std::vector<double> _data;
 };

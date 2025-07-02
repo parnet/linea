@@ -10,7 +10,9 @@ enable_language(CUDA)
 #check_language(CUDA)
 
 if (CMAKE_CUDA_COMPILER)
-    set(CMAKE_CUDA_ARCHITECTURES "86") # for rtx3070Ti, 3090
+    # 80 for A100
+    # 86 for rtx3070Ti, 3090
+    set(CMAKE_CUDA_ARCHITECTURES "80-real;86-real")
     set(CMAKE_CUDA_STANDARD 17)
 #    enable_language(CUDA)
 #    message(STATUS "CUDA found: ${CUDA_VERSION}")

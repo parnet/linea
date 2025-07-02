@@ -1,4 +1,4 @@
-
+/*
 #include "nonopt.hpp"
 
 
@@ -22,3 +22,4 @@ void Operations_Nonopt::matrix_vector_multiplikation(const Matrix & matrix_A, do
     }
 #pragma GCC optimize ("tree-vectorize")
 
+*/

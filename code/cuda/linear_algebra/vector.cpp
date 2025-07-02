@@ -1,4 +1,4 @@
-
+/*
 #ifdef USE_CUDA
 
 #include "vector.hpp"
@@ -24,3 +24,4 @@ double sum_of_squares(const CUDA_Vector & x, cudaStream_t stream) {
     return sum;
 }
 #endif
+*/

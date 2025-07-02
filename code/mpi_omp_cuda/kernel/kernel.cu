@@ -2,27 +2,44 @@
 
 #define BLOCK_SIZE 256
 #define NUM_STREAMS 8
+#include <cstdio>
 
 
-__global__ void zero_row_kernel(double* x, int row_idx, int cols) {
-    int col = blockIdx.x * blockDim.x + threadIdx.x;
-    if (col < cols) {
-        x[row_idx * cols + col] = 0.0;
+__global__ void zero_row_kernel(double* __restrict__ data, int cols, int target_row) {
+    unsigned int tid = threadIdx.x + blockIdx.x * blockDim.x;
+    int start = target_row * cols;
+
+    if (tid < cols) {
+        data[start + tid] = 0.0;
     }
 }
 
+void zero_row_kernel_launch(
+    double* d_data, int cols, int target_row,
+    cudaStream_t stream = nullptr){
+    int threadsPerBlock = 256;
+    int blocksPerGrid = (cols + threadsPerBlock - 1) / threadsPerBlock;
+
+    zero_row_kernel<<<blocksPerGrid, threadsPerBlock,0 , stream>>>(d_data, cols, target_row);
+
+
+    cudaError_t err = cudaGetLastError();
+    if (err != cudaSuccess) {
+        printf("CUDA kernel launch error: %s\n", cudaGetErrorString(err));
+    }
+}
 
 __global__ void residual_crs_kernel(
-    int local_rows,
+    double* __restrict__ defect_values,
+    int num_rows,
     const int* __restrict__ row_ptr,
     const int* __restrict__ col_idx,
     const double* __restrict__ values,
     const double* __restrict__ x,
-    const double* __restrict__ b,
-    double* d)
-{
-    int i = blockIdx.x * blockDim.x + threadIdx.x;
-    if (i >= local_rows) return;
+    const double* __restrict__ rhs_values
+    ) {
+    const unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
+    if (i >= num_rows) return;
 
     double Ax_i = 0.0;
     int row_start = row_ptr[i];
@@ -32,9 +49,33 @@ __global__ void residual_crs_kernel(
         Ax_i += values[j] * x[col_idx[j]];
     }
 
-    d[i] = b[i] - Ax_i;
+    defect_values[i] = rhs_values[i] - Ax_i;
 
 }
+
+ void residual_crs_kernel_launch(
+    double* defect_values,
+    int num_rows,
+    const int* matrix_row_ptr,
+    const int* matrix_col_idx,
+    const double* matrix_a_values,
+    const double* x_values,
+    const double* rhs_values,
+    cudaStream_t stream = nullptr){
+    int threadsPerBlock = 256;
+    int blocksPerGrid = (num_rows + threadsPerBlock - 1) / threadsPerBlock;
+
+    residual_crs_kernel<<<blocksPerGrid, threadsPerBlock,0,stream>>>(defect_values,num_rows, matrix_row_ptr, matrix_col_idx, matrix_a_values, x_values, rhs_values);
+
+    cudaError_t err = cudaGetLastError();
+    if (err != cudaSuccess) {
+        printf("CUDA kernel launch error: %s\n", cudaGetErrorString(err));
+    }
+}
+
+
+
+
 
 __global__ void norm2_partial_sum(const double* x, double* block_sums, int N) {
     __shared__ double sdata[BLOCK_SIZE];
@@ -58,73 +99,118 @@ __global__ void norm2_partial_sum(const double* x, double* block_sums, int N) {
 void reduce_norm_stream(const double* d_x, int N, double* d_result, cudaStream_t stream) {
     int n = N;
     const double* input = d_x;
-    double* partial_sums = nullptr;
 
-    // Allokera max blocks
+    // Buffertar för partial sums (ping-pong)
     int max_blocks = (N + BLOCK_SIZE - 1) / BLOCK_SIZE;
-    cudaMallocAsync(&partial_sums, max_blocks * sizeof(double), stream);
+
+    double* buffer_a = nullptr;
+    double* buffer_b = nullptr;
+    cudaMallocAsync(&buffer_a, max_blocks * sizeof(double), stream);
+    cudaMallocAsync(&buffer_b, max_blocks * sizeof(double), stream);
+
+    bool toggle = true; // styr vilken buffert som är output
 
     while (n > 1) {
         int blocks = (n + BLOCK_SIZE - 1) / BLOCK_SIZE;
-        norm2_partial_sum<<<blocks, BLOCK_SIZE, 0, stream>>>(input, partial_sums, n);
-        cudaStreamSynchronize(stream);
+        double* output = toggle ? buffer_b : buffer_a;
 
+        // Kör kernel
+        norm2_partial_sum<<<blocks, BLOCK_SIZE, 0, stream>>>(input, output, n);
+
+        // Nästa steg använder output som input
         n = blocks;
-        input = partial_sums;
+        input = output;
+
+        // Växla buffert
+        toggle = !toggle;
     }
+
+
 
     // Kopiera slutresultatet (en scalar) till d_result
     cudaMemcpyAsync(d_result, input, sizeof(double), cudaMemcpyDeviceToDevice, stream);
 
-    cudaFreeAsync(partial_sums, stream);
+    cudaFreeAsync(buffer_b, stream);
+    cudaFreeAsync(buffer_a, stream);
 }
 
 
 
-
-void cu_parallel_norm(double &norm, const int N) {
-    double* d_x[NUM_STREAMS];
+void parallel_norm(double &norm, double *x, const int num_elem, cudaStream_t stream = nullptr) {
     double* d_partial_results[NUM_STREAMS];
     cudaStream_t streams[NUM_STREAMS];
     double h_partial_results[NUM_STREAMS];
 
-    // Initiera streams och allokera minne
+    int chunk_size = (num_elem + NUM_STREAMS - 1) / NUM_STREAMS;
+    //size=%d\n", num_elem, chunk_size);
+    // Skapa streams och allokera minne för partial results
     for (int i = 0; i < NUM_STREAMS; i++) {
         cudaStreamCreate(&streams[i]);
-        cudaMalloc(&d_x[i], N * sizeof(double));
         cudaMalloc(&d_partial_results[i], sizeof(double));
-        // TODO: kopiera data till d_x[i] ...
     }
 
-    // Kör parallella reduktioner
+    // Kör parallella reduktioner på delar av x
     for (int i = 0; i < NUM_STREAMS; i++) {
-        reduce_norm_stream(d_x[i], N, d_partial_results[i], streams[i]);
+        int offset = i * chunk_size;
+        int current_chunk = std::min(chunk_size, num_elem - offset);
+
+        if (current_chunk > 0) {
+            //printf("chunk=%d offset=%d\n", current_chunk, offset);
+            reduce_norm_stream(x + offset, current_chunk, d_partial_results[i], streams[i]);
+
+        } else {
+            printf("norm memset case");
+            // säkerhetskopiering om vi gått över gränsen
+            cudaMemsetAsync(d_partial_results[i], 0, sizeof(double), streams[i]);
+        }
     }
 
-    // Synkronisera alla streams
+    // Synkronisera och samla resultat
     for (int i = 0; i < NUM_STREAMS; i++) {
         cudaStreamSynchronize(streams[i]);
-    }
-
-    // Kopiera partial sums till host
-    for (int i = 0; i < NUM_STREAMS; i++) {
         cudaMemcpy(&h_partial_results[i], d_partial_results[i], sizeof(double), cudaMemcpyDeviceToHost);
     }
 
-    // Slutlig norm
+    // Summera och ta roten
     double sum = 0;
     for (int i = 0; i < NUM_STREAMS; i++) {
         sum += h_partial_results[i];
     }
-    double norm = sqrt(sum);
+    norm = sqrt(sum);
 
-
-    // Frigör resurser
+    // Rensa upp
     for (int i = 0; i < NUM_STREAMS; i++) {
-        cudaFree(d_x[i]);
         cudaFree(d_partial_results[i]);
         cudaStreamDestroy(streams[i]);
     }
-
 }
 
+
+
+__global__ void jacobi_step_kernel(
+    double* __restrict__ x_new,
+    const double* __restrict__ x_old,
+    const double* __restrict__ omega_D_inv,// omega * D^{-1} precomputed
+    const double* __restrict__ defect,
+    int N)
+{
+    unsigned int row = blockIdx.x * blockDim.x + threadIdx.x;
+    if (row >= N) return;
+
+    x_new[row] = x_old[row] + (omega_D_inv[row]*defect[row]);
+}
+
+
+void jacobi_step_launch(
+    double* x_new,
+    const double* x_old,
+    const double* omega_D_inv,
+    const double* defect,
+    int num_rows,
+    cudaStream_t stream  // default: stream 0 (default stream)
+) {
+    constexpr int blockSize = 256;
+    const int gridSize = (num_rows + blockSize - 1) / blockSize;
+
+    jacobi_step_kernel<<<gridSize, blockSize, 0, stream>>>(x_new, x_old, omega_D_inv, defect, num_rows);
+}

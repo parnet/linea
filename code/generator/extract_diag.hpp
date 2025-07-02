@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "data/crs_matrix.hpp"
+#include "data/data.hpp"
 #include "data/vector.hpp"
 
 void crs_to_dense(

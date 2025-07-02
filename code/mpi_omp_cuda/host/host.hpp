@@ -1,49 +1,78 @@
 #ifndef HOST_HPP
 #define HOST_HPP
-#include "data/vector.hpp"
-#include "mpi_omp_cuda/data/crs_matrix.hpp"
+
+#include "mpi_omp_cuda/data/data.hpp"
 
 inline void create_zero(Vector & defect) {
-    std::cout << "todo - implement" << std::endl;
+    // std::cout << "todo - implement ( create_zero ) " << std::endl;
+    const size_t size = defect._num_elements;
+    for (size_t i = 0; i < size; ++i) {
+        defect._values[i] = 0;
+    };
 }
 
 inline void extract_diagonal(Vector & diag, CRS_Matrix & matrix, double omega) {
-    std::cout << "todo - implement" << std::endl;
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    std::cout << "rank=" << rank << "\t"<< matrix._num_rows << ", " << matrix._num_cols << std::endl;
 
+    for (int row = 0; row < matrix._num_rows; row++) {
+        int row_start = matrix._rows_pointer[row];
+        int row_end = matrix._rows_pointer[row+1];
+        bool diagonal = false;
+        for (int col_idx = row_start; col_idx < row_end; col_idx++) {
+            int col = matrix._col_index[col_idx];
+            if (col == row) {
+                diag._values[row] = omega/matrix._values[col_idx];
+                diagonal = true;
+            }
+        }
+        if (!diagonal) {
+            std::cout << "error - no diagonal element" << std::endl;
+        }
+    }
 }
 
-inline void laplace_rhs_function(Vector & rhs, int Nx, int Nx, double alpha) {
-    std::cout << "todo - implement" << std::endl;
+inline void laplace_rhs_function(Vector & rhs, int Nx, int Ny, double alpha, int y_offset) {
+
+    for (std::size_t i = 0; i < Ny; ++i) {
+        double y = static_cast<double>(i+y_offset) / static_cast<double>(Nx-1);
+        for (std::size_t j = 0; j < Nx; ++j) {
+            double x = static_cast<double>(j) / static_cast<double>(Nx-1);
+            rhs._values[i*Nx+j] = 2 * alpha* M_PI*sin(M_PI*x)*sin(M_PI*y);
+        }
+    }
 
 }
 
 inline CRS_Matrix create_laplacian_2d(int num_x, int num_y) {
-    const int global_rows = num_x * num_y;
+        const int global_rows = num_x * num_y;
     const int global_cols = num_x * num_y;  // square matrix
 
-    std::cout <<"global_rows = " << global_rows << std::endl;
+    // std::cout <<"global_rows = " << global_rows << std::endl;
 
     std::vector<double> data;
     std::vector<int> col_index;
     std::vector<int> row_ptr(global_rows + 1, 0);
 
     int i,j;
-    std::cout << "gridsize = " << num_x << std::endl;
-    std::cout << "gridsize = " << num_y << std::endl;
+    //std::cout << "gridsize = " << num_x << std::endl;
+    //std::cout << "gridsize = " << num_y << std::endl;
     for (int global_row = 0; global_row < global_rows; ++global_row) {
 
         row_ptr[global_row] = static_cast<int>(data.size());
 
-        i = global_row / num_x;
-        j = global_row % num_x;
-        std::cout << "i = " << i << ", j = " << j;
+        i = global_row % num_x;
+        j = global_row / num_x;
+        //std::cout << "i = " << i << ", j = " << j;
 
         if (i == 0 || i == num_x - 1 || j == 0 || j == num_y - 1) {
-            std::cout << "t" << std::endl;
+            //std::cout << "t" << std::endl;
             data.push_back(1.0);
             col_index.push_back(global_row);
         } else {
-            std::cout << "f" << std::endl;
+            //std::cout << "f" << std::endl;
+            //std::cout << "num_x=" << num_x << " num_y="<<num_y << std::endl;
             // Interior node: 5-point stencil
             int center = global_row;
             int left   = center - 1;

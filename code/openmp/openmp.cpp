@@ -1,4 +1,5 @@
 
+/*
 #include "libs/openmp.hpp"
 #include "openmp.hpp"
 
@@ -63,3 +64,4 @@ double Operations_OpenMP::norm(const Vector &vector_x) {
     return sum;
 }
 #endif
+*/

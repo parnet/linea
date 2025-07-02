@@ -10,7 +10,7 @@
 
 
 #include "cuda_datastructures.hpp"
-#include "data/crs_matrix.hpp"
+#include "data/data.hpp"
 
 
 #include <cuda_runtime.h>

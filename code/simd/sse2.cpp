@@ -1,4 +1,5 @@
 #include "sse2.hpp"
+/*
 #include "../libs/intrinsics.hpp"
 
 void Operations_SSE2::matrix_vector_multiplikation(const Matrix &matrix_A, double alpha,
@@ -34,3 +35,4 @@ void Operations_SSE2::matrix_vector_multiplikation(const Matrix &matrix_A, doubl
         vektor_y._data[i] += alpha * total_sum;
     }
 }
+*/

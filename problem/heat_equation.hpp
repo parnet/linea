@@ -56,8 +56,8 @@ inline  void benchmark_heat_equation() {
     //hip_heat_equation(2048, 2048, 0, 2.0, 512);
     // hipsparse_heat_equation(2048, 2048, 0, 2.0, 512);
 
-    laplacian(1, 1, 0, 2.0, 512); // dummy to warm up gpu
-    laplacian(2048, 2048, 0, 2.0, 512);
+    distr_problem(1, 1, 0, 2.0, 512); // dummy to warm up gpu
+    distr_problem(2048, 2048, 0, 2.0, 512);
     //cpu_heat_equation( 2048, 2048, 0, 2.0, 512);
 
 

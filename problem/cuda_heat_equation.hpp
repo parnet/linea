@@ -32,7 +32,7 @@ inline void vec_print(const char * name, Vector & vec, int Nx,int  Ny) {
     std::cout << std::endl;
 }
 
-inline void laplacian(int Nx, int Ny, double t0, double tn, int Nt) {
+inline void distr_problem(int Nx, int Ny, double t0, double tn, int Nt) {
     Timer walltime;
     walltime.start();
     std::cout << "heat_equation" <<std::endl;

@@ -1,4 +1,5 @@
 #pragma once
+/*
 #ifdef USE_CUDA
 #include <cuda_runtime.h>
 #include "data/crs_matrix.hpp"
@@ -44,3 +45,4 @@ public:
 };
 
 #endif
+*/

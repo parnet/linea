@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "../data/crs_matrix.hpp"
+#include "../data/data.hpp"
 
 CRS_Matrix create_laplacian_2d(size_t gridsize){ // 5 for 3 inner nodes and two boundary nodes in one direction
 

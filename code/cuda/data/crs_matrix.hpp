@@ -1,4 +1,5 @@
 #pragma once
+/*
 #ifdef USE_CUDA
 #include <cuda_runtime.h>
 
@@ -46,3 +47,4 @@ public:
     }
 };
 #endif
+*/

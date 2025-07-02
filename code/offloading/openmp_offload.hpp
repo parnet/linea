@@ -3,7 +3,7 @@
 
 #include "../data/matrix.hpp"
 #include "../data/vector.hpp"
-#include "../data/crs_matrix.hpp"
+#include "../data/data.hpp"
 
 struct Operations_OpenMP_Offload {
     static constexpr const char * name ="OpenMPOffload";

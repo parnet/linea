@@ -1,7 +1,7 @@
 #include "cpu/cpu_nonconst.hpp"
 
 
-
+/*
 void Operations_CPU_NonConst::matrix_vector_multiplikation(const Matrix &matrix_A, double alpha, const Vector &vektor_x,
                                                            double beta, Vector &vektor_y) {
 
@@ -16,3 +16,4 @@ void Operations_CPU_NonConst::matrix_vector_multiplikation(const Matrix &matrix_
         }
     }
 }
+*/

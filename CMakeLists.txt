@@ -168,7 +168,7 @@ add_executable(${PROJECT_NAME}
         code/data/std_flat_matrix.hpp
         code/util/aligned_allocator.hpp
         code/data/c_aligned_vector.hpp
-        code/data/crs_matrix.hpp
+        code/data/data.hpp
         code/data/std_vector.hpp
         code/data/std_aligned_vector.hpp
         code/data/std_aligned_matrix.hpp
@@ -276,9 +276,9 @@ add_executable(${PROJECT_NAME}
         problem/cpu_heat_equation.hpp
         problem/hipsparse_heat_equation.hpp
         problem/vec_print.hpp
-        code/mpi_omp_cuda/data/crs_matrix.hpp
+        code/mpi_omp_cuda/data/data.hpp
         code/mpi_omp_cuda/distribution.hpp
-        code/mpi_omp_cuda/laplacian.hpp
+        code/mpi_omp_cuda/problem.hpp
         code/mpi_omp_cuda/create_laplacian.hpp
         code/mpi_omp_cuda/kernel/kernel.cuh
         code/mpi_omp_cuda/kernel/kernel.cu

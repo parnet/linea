@@ -1,6 +1,6 @@
 #pragma once
 
-
+/*
 #include "../data/crs_matrix.hpp"
 #include "../data/matrix.hpp"
 #include "../data/vector.hpp"
@@ -18,4 +18,4 @@ struct Operations_CPU {
     static double dot_product(const Vector & vector_x, const Vector & vector_y);
 };
 
-
+*/

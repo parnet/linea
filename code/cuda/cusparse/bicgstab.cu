@@ -46,6 +46,7 @@
  * comments to the code, the above Disclaimer and U.S. Government End
  * Users Notice.
  */
+/*
 #include "bicgstab.cuh"
 
 #include <cuda_runtime.h>
@@ -784,3 +785,4 @@ int test_main(CRS_Matrix mat) {
     CHECK_CUDA( cudaFree(d_bufferMV) )
     return EXIT_SUCCESS;
 }
+*/

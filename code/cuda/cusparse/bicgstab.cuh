@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 #ifdef USE_CUDA
 
 #include <cuda_runtime.h>
@@ -7,7 +7,7 @@
 
 #include <cusparse.h>
 
-#include "data/crs_matrix.hpp"
+#include "data/data.hpp"
 
 int orig_main();
 
@@ -35,3 +35,4 @@ int gpu_BiCGStab(cublasHandle_t       cublasHandle,
 int test_main(CRS_Matrix mat);
 
 #endif
+*/

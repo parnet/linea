@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 #include "../libs/openmp.hpp"
 #ifdef USE_OPENMP
 #include "../data/matrix.hpp"
@@ -19,3 +19,4 @@ struct Operations_OpenMP {
 };
 #endif
 
+*/

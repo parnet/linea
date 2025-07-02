@@ -1,4 +1,4 @@
-
+/*
 #include "crs_residual.cuh"
 
 
@@ -49,3 +49,4 @@ void cu_crs_residual_launch(
         printf("CUDA kernel launch error: %s\n", cudaGetErrorString(err));
     }
 }
+*/

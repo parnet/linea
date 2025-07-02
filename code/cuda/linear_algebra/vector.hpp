@@ -1,4 +1,5 @@
 #pragma once
+/*
 #ifdef USE_CUDA
 #include <cuda_runtime.h>
 #include "cuda/data/vector.hpp"
@@ -17,3 +18,4 @@ inline void cu_jacobi_step(CUDA_Vector &x_new,  CUDA_Vector &x0,CUDA_Vector &ome
         stream);
 };
 #endif
+*/

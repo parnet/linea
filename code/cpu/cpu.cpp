@@ -1,4 +1,4 @@
-
+/*
 #include "cpu.hpp"
 
 void Operations_CPU::matrix_vector_multiplikation(const Matrix & matrix_A, double alpha,  const Vector & vektor_x, double beta, Vector & vektor_y) {
@@ -51,3 +51,4 @@ double Operations_CPU::dot_product(const Vector &vector_x, const Vector &vector_
     }
     return sum;
 }
+*/

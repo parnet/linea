@@ -288,6 +288,7 @@ add_executable(${PROJECT_NAME}
 
 if(ENABLE_CUDA)
     find_package(CUDAToolkit REQUIRED)
+
 endif ()
 
 

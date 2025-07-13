@@ -6,3 +6,7 @@ bin/
 
 # Exkludera .idea mappar (från IntelliJ IDEA eller JetBrains)
 .idea/
+/cmake-build-debug/
+/cmake-build-debug-gcc/
+/cmake-build-debug-g/
+/cmake-build-debug-clang/

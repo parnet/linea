@@ -1,6 +1,9 @@
+message(STATUS "ENABLE_CUDA: ${ENABLE_CUDA}")
+
 if (ENABLE_CUDA)
 # Enable CUDA
-
+set(CMAKE_CUDA_FLAGS=--allow-unsupported-compiler -Wno-deprecated-gpu-targets)
+set(CMAKE_CUDA_ARCHITECTURES "80-real;86-real")
 #include(CheckLanguage)
 enable_language(CUDA)
 
@@ -22,8 +25,6 @@ if (CMAKE_CUDA_COMPILER)
 #    set(CMAKE_CXX_COMPILER nvcc)
 
 
-
-    #elseif ()
     message(STATUS "[X]   CUDA version: ${CMAKE_CUDA_COMPILER_VERSION}") # todo search for version
 else ()
     message(STATUS "[ ]   CUDA was not found")

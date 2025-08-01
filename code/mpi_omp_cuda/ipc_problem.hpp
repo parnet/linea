@@ -108,8 +108,6 @@ inline void distr_problem(int Nx, int Ny /*uppdelning utan överlappning*/) {
     cudaStreamSynchronize(cu_x_current.stream);
 
 
-
-
     cudaStream_t stream;
     cudaStreamCreate(&stream);
 
@@ -136,31 +134,29 @@ inline void distr_problem(int Nx, int Ny /*uppdelning utan överlappning*/) {
     cudaMalloc((void**)&buffer_32, sizeof(double) * Nx);*/
 
     for (int k = 0 ; k < max_iteration; k++){
-        MPI_Request requests[5];
+        MPI_Request requests[6];
         int req_count = 0;
-        MPI_Status status;
 
-
-        cudaIpcMemHandle_t mem_handle_e, mem_handle_e_rec;
+        cudaIpcMemHandle_t mem_handle_e_send, mem_handle_e_rec;
         double * remote_x0_e;
 
-        cudaIpcMemHandle_t mem_handle_p, mem_handle_p_rec;
+        cudaIpcMemHandle_t mem_handle_p_send, mem_handle_p_rec;
         double * remote_x0_p;
 
 
         if (comm_rank != 0){ // tar emot från mindre index du är inte första processoren
-            cudaIpcGetMemHandle(&mem_handle_p, cu_x0._values);
+            cudaIpcGetMemHandle(&mem_handle_p_send, cu_x0._values);
 
-            MPI_Irecv(&mem_handle_p_rec, sizeof(mem_handle_p), MPI_BYTE, comm_rank - 1 , 505, MPI_COMM_WORLD, &requests[req_count++]);
-            MPI_Isend(&mem_handle_p, sizeof(mem_handle_p), MPI_DOUBLE, comm_rank - 1, 550, MPI_COMM_WORLD, &requests[req_count++]);
+            MPI_Irecv(&mem_handle_p_rec, sizeof(mem_handle_p_rec), MPI_BYTE, comm_rank - 1 , 505, MPI_COMM_WORLD, &requests[req_count++]);
+            MPI_Isend(&mem_handle_p_send, sizeof(mem_handle_p_send), MPI_DOUBLE, comm_rank - 1, 550, MPI_COMM_WORLD, &requests[req_count++]);
 
         }
 
         if (comm_rank != comm_size - 1) { // tar emot från högre index om du är inte sista processorn
-            cudaIpcGetMemHandle(&mem_handle_e, cu_x0._values);
+            cudaIpcGetMemHandle(&mem_handle_e_send, cu_x0._values);
 
-            MPI_Irecv(&mem_handle_e_rec, sizeof(mem_handle_p), MPI_DOUBLE, comm_rank + 1 , 550, MPI_COMM_WORLD, &requests[req_count++]);
-            MPI_Isend(&mem_handle_e, sizeof(mem_handle_p), MPI_DOUBLE, comm_rank + 1, 505, MPI_COMM_WORLD, &requests[req_count++]);
+            MPI_Irecv(&mem_handle_e_rec, sizeof(mem_handle_e_rec), MPI_DOUBLE, comm_rank + 1 , 550, MPI_COMM_WORLD, &requests[req_count++]);
+            MPI_Isend(&mem_handle_e_send, sizeof(mem_handle_e_send), MPI_DOUBLE, comm_rank + 1, 505, MPI_COMM_WORLD, &requests[req_count++]);
         }
 
         x_crs_residual(cu_defect, cu_laplace_matrix, cu_x0, cu_rhs, stream);
@@ -181,15 +177,16 @@ inline void distr_problem(int Nx, int Ny /*uppdelning utan överlappning*/) {
         if (comm_rank != 0) { // rank =1, rank=2, ... vill har resultat i första rad
             int remote_Ny = 0;
             if (comm_rank == 1){remote_Ny = proc_Nx*(proc_Ny - 2) ;} else {remote_Ny = proc_Nx*(proc_Ny - 1);}
-            cudaIpcOpenMemHandle((void**)&remote_x0_p, mem_handle_p_rec, cudaIpcMemLazyEnablePeerAccess);
             std::cout << 0 << "    <===    " << remote_Ny << std::endl;
-            cudaMemcpyAsync(&cu_x0._values[0], &remote_x0_p[remote_Ny], proc_Nx * sizeof(double), cudaMemcpyDeviceToDevice, stream);
+            cudaIpcOpenMemHandle((void**)&remote_x0_p, mem_handle_p_rec, cudaIpcMemLazyEnablePeerAccess);
+            cudaMemcpyAsync(&cu_x0._values[proc_Nx*(proc_Ny - 1)], &remote_x0_p[proc_Nx*remote_Ny], proc_Nx * sizeof(double), cudaMemcpyDeviceToDevice, stream);
         }
 
         if (comm_rank != comm_size - 1) {  // rank =0, rank=1, ... vill har resultat i sista rad
             int remtoe_first_entry = 0;
-            cudaIpcOpenMemHandle((void**)&remote_x0_e, mem_handle_e_rec, cudaIpcMemLazyEnablePeerAccess);
             std::cout << proc_Nx*(proc_Ny-1) <<  "    <===    " << 0 << std::endl;
+            std::cout << proc_Nx*(proc_Ny-1) <<  "    <===    " << 0 << std::endl;
+            cudaIpcOpenMemHandle((void**)&remote_x0_e, mem_handle_e_rec, cudaIpcMemLazyEnablePeerAccess);
             cudaMemcpyAsync(&cu_x0._values[proc_Nx*(proc_Ny-1)], &remote_x0_e[0], proc_Nx * sizeof(double), cudaMemcpyDeviceToDevice, stream);
         }
         cudaStreamSynchronize(stream);

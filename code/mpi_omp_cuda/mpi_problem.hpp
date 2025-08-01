@@ -11,6 +11,10 @@
 #include "kernel/bridge.hpp"
 #include "util/converter.hpp"
 
+#if !defined(MPIX_CUDA_AWARE_SUPPORT) || !MPIX_CUDA_AWARE_SUPPORT
+#error "The used MPI Implementation does not have CUDA-aware support or CUDA-aware
+support can't be determined. Define SKIP_CUDA_AWARENESS_CHECK to skip this check."
+#endif
 
 inline void vec_print(const char * name, Vector & vec, int Nx,int  Ny) {
     std::cout << name << std::endl;
@@ -165,8 +169,6 @@ inline void mpi_aware_problem(int Nx, int Ny /*uppdelning utan överlappning*/) 
             MPI_Irecv(&cu_x0._values[proc_Nx*(proc_Ny - 1)], proc_Nx, MPI_DOUBLE, comm_rank - 1, 0, MPI_COMM_WORLD, &requests[req_count++]);
             //std::cout << "rec rank=" << comm_rank <<"\t proc=" << comm_rank - 1 << " \t tag=" << 0 << std::endl;
             //std::cout <<"rank="<<comm_rank<< "\t"<< 0 << "    <===    " << proc_Nx*(proc_Ny - 1)-1 << std::endl;
-
-
             MPI_Isend(&cu_x0._values[proc_Nx*(proc_Ny - 2)], proc_Nx, MPI_DOUBLE, comm_rank - 1, 1, MPI_COMM_WORLD, &requests[req_count++]);
             //std::cout <<"rank="<<comm_rank<< "\t"<< proc_Nx*(proc_Ny - 2)-1 << "    <===    " << 0 << std::endl;
             //std::cout << "send rank=" << comm_rank <<"\t proc=" << comm_rank - 1 << " \t tag=" << 1 << std::endl;
@@ -178,7 +180,6 @@ inline void mpi_aware_problem(int Nx, int Ny /*uppdelning utan överlappning*/) 
             MPI_Irecv(&cu_x0._values[0], proc_Nx, MPI_DOUBLE, comm_rank + 1, 1, MPI_COMM_WORLD, &requests[req_count++]);
             //std::cout << "rec rank=" << comm_rank <<"\t proc=" << comm_rank + 1 << " \t tag=" << 0 << std::endl;
             //std::cout << proc_Nx*(proc_Ny-1) <<  "    <===    " << 0 << std::endl;
-
             //cudaMemcpyAsync(&cu_x0._values[proc_Nx*(proc_Ny-1)], &remote_x0_e[0], proc_Nx * sizeof(double), cudaMemcpyDeviceToDevice, stream);
             MPI_Isend(&cu_x0._values[proc_Nx], proc_Nx, MPI_DOUBLE, comm_rank + 1, 0, MPI_COMM_WORLD, &requests[req_count++]);
             //std::cout << "send rank=" << comm_rank <<"\t proc=" << comm_rank + 1 << " \t tag=" << 1 << std::endl;

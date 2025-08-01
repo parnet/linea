@@ -16,10 +16,12 @@ export CUDA_VISIBLE_DEVICES=0,1,2,3
 # Ladda moduler
 module load CMake/3.30.3
 module load NVHPC/25.5-CUDA-12
+module load OpenMPI
 
 cd $SCRATCH
 mkdir -p test_run
 cd test_run
 
 # Starta appen med mpirun eller srun
-srun --cpu-bind=cores --cpu-bind=map_cpu:0,32,64,96 ~/pro/linear/bin/Linea
+srun --export=ALL,OMPI_MCA_mpi_cuda_support=1 --cpu-bind=cores --cpu-bind=map_cpu:0,32,64,96 ~/pro/linea/bin/Linea
+mpirun --mca mpi_cuda_support 1 --bind-to core=cores --cpu-bind=map_cpu:0,32,64,96 ~/pro/linea/bin/Linea
